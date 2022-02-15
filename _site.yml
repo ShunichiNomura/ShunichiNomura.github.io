@@ -4,8 +4,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "Journal"
+    - text: "RStudio Cloudの使い方"
       href: Journal.html
-    - text: "Links"
+    - text: "基本操作"
       href: Links.html
 output_dir: "docs"
