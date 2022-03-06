@@ -2,10 +2,21 @@ name: "RStudio入門"
 navbar:
   title: "RStudio入門"
   left:
-    - text: "Home"
+    - text: "はじめに"
       href: index.html
-    - text: "RStudio Cloudの使い方"
-      href: Journal.html
+    - text: "インストール"
+      href: install.html
+    - text: "RStudio Cloud"
+      href: cloud.html
     - text: "基本操作"
-      href: Links.html
+      href: basics.html
+output:
+  html_document:
+    theme: readable
+    highlight: default
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    df_print: "tibble"
+    css: site_style.css
 output_dir: "docs"
