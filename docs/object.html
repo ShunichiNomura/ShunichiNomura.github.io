@@ -416,16 +416,12 @@ a # ベクトル a が元に戻っていることを確認</code></pre>
 <ul>
 <li><p>==：左辺と右辺が等しい</p></li>
 <li><p>!=：左辺と右辺が等しくない</p></li>
-<li><blockquote>
-<p>=：左辺が右辺以上である</p>
-</blockquote></li>
+<li><p>&gt;=：左辺が右辺以上である</p></li>
 <li><p>&lt;=：左辺が右辺以下である</p></li>
-<li><blockquote>
-<p>：左辺が右辺を上回る</p>
-</blockquote></li>
+<li><p>&gt;：左辺が右辺を上回る</p></li>
 <li><p>&lt;：左辺が右辺を下回る</p></li>
+<li><p>%in%：左辺が右辺の要素のいずれかと等しい</p></li>
 </ul>
-<p>-%in%：左辺が右辺の要素のいずれかと等しい</p>
 <pre class="r"><code>a[a &gt;= 30] # 3以上である a の要素を参照</code></pre>
 <pre><code>## [1] 30 40 50</code></pre>
 <pre class="r"><code>b = c(50,40,30,20,10) # オブジェクト（ベクトル）b を定義
