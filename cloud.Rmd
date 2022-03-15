@@ -1,13 +1,12 @@
 ---
 title: "RStudio Cloud"
-date: "最終更新: `r Sys.Date()`"
 output:
   html_document:
     toc: true
     toc_float: true
     collapsed: false
     number_sections: false
-    toc_depth: 2
+    toc_depth: 3
     #code_folding: hide
 ---
 
@@ -23,13 +22,13 @@ Webブラウザ上でRStudioを扱うことのできるクラウドサービス�
 
 RStudio Cloudには無料アカウント（Free plan）と有料アカウント（数種類のplan）があり、無料アカウントの場合には利用にあたり以下の制限があることに注意してください。
 
-- 月の利用時間上限が２５時間（一部の有料アカウントでは無制限）
+- 月の利用時間上限が25時間（一部の有料アカウントでは無制限）
 
-- 保存できるプロジェクト数上限が５０個（一部の有料アカウントでは無制限）
+- 保存できるプロジェクト数上限が50個（一部の有料アカウントでは無制限）
 
-- 1つの命令実行時間の上限が１時間（一部の有料アカウントでは４８時間）
+- 1つの命令文の実行時間の上限が1時間（一部の有料アカウントでは48時間）
 
-- 利用できるメモリ量は１GB（一部の有料アカウントでは１６GB）
+- 利用できるメモリ量は1GB（一部の有料アカウントでは16GB）
 
 もし、月の利用時間上限に引っかかってしまった場合は、別のアカウントを作成して利用するか、有料アカウントを持っている方の共有スペース(Shared Space)からRStudio Cloudを利用することができます。
 
@@ -39,8 +38,8 @@ RStudio Cloudには無料アカウント（Free plan）と有料アカウント�
 
 ![](images/signup.png){width=40%}
 
-### １．一般のEmailアドレスで登録する方法
-Email, Password, First name, Last nameを入力して"Sign Up"ボタンをクリックすると、下図のVerify Your Emailというページに遷移するので、入力したEmailアドレスに差出人"noreply\@rstudio.cloud"から件名"Please verify your email address"のメールが届いているのを確認し、メール本文中の"Verify your email"と書かれたリンクをクリックしてください（７２時間経過するとリンクが無効となりますのでご注意ください）。
+### 一般のEmailアドレスで登録する方法
+Email, Password, First name, Last nameを入力して"Sign Up"ボタンをクリックすると、下図のVerify Your Emailというページに遷移するので、入力したEmailアドレスに差出人"noreply\@rstudio.cloud"から件名"Please verify your email address"のメールが届いているのを確認し、メール本文中の"Verify your email"と書かれたリンクをクリックしてください（72時間経過するとリンクが無効となりますのでご注意ください）。
 
 ![](images/verifyemail.png){width=40%}
 
@@ -48,7 +47,7 @@ Email, Password, First name, Last nameを入力して"Sign Up"ボタンをクリ
 
 ![](images/verified.png){width=40%}
 
-### ２．Googleアカウントで登録する方法
+### Googleアカウントで登録する方法
 
 "Sign Up with Google"をクリックすると、上部に"Googleにログイン"と書かれたページに遷移するので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。その結果、ログイン後の画面が現れれば登録完了です。
 
@@ -58,13 +57,13 @@ Email, Password, First name, Last nameを入力して"Sign Up"ボタンをクリ
 
 ![](images/login.png){width=40%}
 
-### １．一般のEmailアドレスで登録している場合
+### 一般のEmailアドレスで登録している場合
 
 Email欄に登録したEmailアドレスを入力して"Continue"をクリックし、遷移したページのPassword欄にPasswordを入力して"Log In"をクリックしてください。すると、下図のような利用サービスを選択するページに遷移しますので、"RStudio Cloud"をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。
 
 ![](images/destination.png){width=40%}
 
-### ２．Googleアカウントで登録している場合
+### Googleアカウントで登録している場合
 
 "Log In with Google"をクリックすると、上部に"Googleにログイン"と書かれたページに移るので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。すると、上図のような利用サービスを選択するページに遷移しますので、"RStudio Cloud"をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。
 

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>関数</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RStudio入門</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">はじめに</a>
+</li>
+<li>
+  <a href="install.html">インストール</a>
+</li>
+<li>
+  <a href="cloud.html">RStudio Cloud</a>
+</li>
+<li>
+  <a href="basics.html">基本操作</a>
+</li>
+<li>
+  <a href="object.html">オブジェクト</a>
+</li>
+<li>
+  <a href="function.html">関数</a>
+</li>
+<li>
+  <a href="files.html">ファイル入出力</a>
+</li>
+<li>
+  <a href="analysis.html">回帰分析と作図</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">関数</h1>
+
+</div>
+
+
+<div id="関数の使い方とヘルプ" class="section level2">
+<h2>関数の使い方とヘルプ</h2>
+<p>Rにおけるデータ分析は、ほとんどが関数（および演算子）を使って進められます。 関数には、関数電卓にあるような対数関数logなどの数学関数だけでなく、回帰分析などのデータ分析を行う関数、作図する関数、外部ファイルの入出力を行う関数など様々なものがあります。既に解説したベクトル、データフレームの作成に用いる c, data.frame も関数です。 さらに、拡張パッケージを導入することにより、世界中で開発された万を超える数の関数が利用可能です。 このページでは、ベクトルやデータフレームに適用できる基本的な関数とパッケージの導入について解説します。</p>
+<p>全ての関数は共通して、次のような形で使用します。</p>
+<p>関数名(第1引数, 第2引数,…, 引数名a = 引数a, 引数名b = 引数b,…)</p>
+<p>上の書き方だけでは分かりませんので、数値を四捨五入する関数roundを例に説明いたします。使い方の分からない関数は、右下のHelpタブで虫メガネの右欄に関数名を入力してEnter(Return)を押すか、Consoleタブで ?関数名 または help(関数名) と入力してEnter(Return)を押すことで、下図のようにHelpタブ上で英語のヘルプを参照することができます。（あるいは、多くの関数はGoogleなどで「r 関数名」などと検索すれば日本語の解説記事も見つかります。）</p>
+<p><img src="images/round.png" style="width:80.0%" /></p>
+<p>上記のround関数のヘルプでは、round以外の関数もいくつか一緒に解説されていますが、上端から少し下にスクロールしますと下図のUsage節にroundの使い方が次のように書いてあります。</p>
+<p>round(x, digits = 0)</p>
+<p>この関数の中にある文字が「引数名」です。i番目の引数を第i引数と呼ぶことにしますと、xが第1引数、digitsが第2引数の名前となります。引数の意味はUsage節の下のArguments節に書かれており、xはnumeric vectorすなわち数値ベクトル、digitsは小数点以下何桁より下を四捨五入するか指定する整数となります。上では“digits = 0”と書かれていますが、この“=”より右の値“0”はデフォルト値（省略時規定値）と呼ばれ、round関数の使用時に引数digitsの値をに指定しなかった場合は自動的にdigits = 0（小数点以下四捨五入）とすることを意味します。</p>
+<p>それではround関数を実際に使ってみます。以下に示す４つの命令文は全て1.2の小数点以下を四捨五入しています。</p>
+<pre class="r"><code>round(1.2) # 第1引数 x のみに値を入れる（第2引数 digits はデフォルト値 0 となる）</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>round(1.2, 0) # 第1引数 x と第2引数 digits に順に値を入れる</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>round(x = 1.2, digits = 0) # 第1引数 x と第2引数 digits に引数名を指定して値を入れる</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>round(digits = 0, x = 1.2) # 第2引数 digits と第1引数 x に引数名を指定して値を入れる</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>上の例のように、関数の使い方にはいくつかバリエーションがあることを覚えておいてください。引数の入れ方の注意点をまとめると以下の通りです。</p>
+<ul>
+<li><p>Usageにある順番通りに引数の値を入れる場合には、関数内に引数の値だけ入力すればよい。</p></li>
+<li><p>Usageにある順番を無視して引数の値を入れる場合には、「引数名 = 引数の値」と引数名を指定する必要がある。</p></li>
+<li><p>デフォルト値をもつ引数には、値を入れなければ自動的にデフォルト値が入る。</p></li>
+</ul>
+</div>
+<div id="ベクトルに使う関数" class="section level2">
+<h2>ベクトルに使う関数</h2>
+<p>ここでは、ベクトル（単一の値の場合も含む）に対して良く使われる関数をごく簡単に紹介します。</p>
+<p>まず以下に示すのは、ベクトルの要素ごとに単純な数値演算を行う数学関数です。計算不能な負の値の平方根や対数はNaN(非数値)という結果（以降、<strong>戻り値</strong>と呼びます）になります。</p>
+<pre class="r"><code>v = c(-1.24, 0, 4, 0.5) # 数値ベクトルを作成
+abs(v) # 絶対値</code></pre>
+<pre><code>## [1] 1.24 0.00 4.00 0.50</code></pre>
+<pre class="r"><code>floor(v) # 小数点未満切り捨て</code></pre>
+<pre><code>## [1] -2  0  4  0</code></pre>
+<pre class="r"><code>round(v, 1) # 小数第１位未満を四捨五入</code></pre>
+<pre><code>## [1] -1.2  0.0  4.0  0.5</code></pre>
+<pre class="r"><code>sqrt(v) # 平方根</code></pre>
+<pre><code>## [1]       NaN 0.0000000 2.0000000 0.7071068</code></pre>
+<pre class="r"><code>log(v, 10) # 対数関数（第2引数は対数の底）</code></pre>
+<pre><code>## [1]      NaN     -Inf  0.60206 -0.30103</code></pre>
+<p>次に以下に示すのは、ベクトルを集計・操作する関数です。それぞれベクトルの集計値あるいは操作されたベクトルを戻り値として返します。</p>
+<pre class="r"><code>length(v) # ベクトルの要素数</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>sum(v) # 数値ベクトルの総和（全ての要素の和）</code></pre>
+<pre><code>## [1] 3.26</code></pre>
+<pre class="r"><code>prod(v) # 数値ベクトルの総乗（全ての要素の積）</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>mean(v) # 数値ベクトルの平均（＝総和/要素数 sum(v)/length(v)）</code></pre>
+<pre><code>## [1] 0.815</code></pre>
+<pre class="r"><code>sort(v) # ベクトルの要素の並べ替え（デフォルトは昇順）</code></pre>
+<pre><code>## [1] -1.24  0.00  0.50  4.00</code></pre>
+<pre class="r"><code>sort(v, T) # ベクトルの要素の並べ替え（第2引数にTまたはTRUEを入れると降順になる）</code></pre>
+<pre><code>## [1]  4.00  0.50  0.00 -1.24</code></pre>
+<p>上の例で、sort関数の使い方(Usage)は次の通りです。ちなみに、文字列ベクトルもsort関数で並べ替えが可能です。</p>
+<p>sort(x, decreasing = FALSE) （第2引数 decreasing がTRUEなら降順、FALSE（デフォルト）なら昇順）</p>
+<p>最後に以下に示すのは、ベクトルを値の種類ごとにグルーピングして集計する関数tableとtapplyです。</p>
+<pre class="r"><code>w = c(&quot;A&quot;,&quot;B&quot;,&quot;A&quot;,&quot;C&quot;) # 文字列ベクトルを作成
+table(w) # ベクトルの値の種類ごとの出現回数を集計</code></pre>
+<pre><code>## w
+## A B C 
+## 2 1 1</code></pre>
+<pre class="r"><code>tapply(v, w, sum) # w の値の種類ごとの v の値の総和(sum)を集計</code></pre>
+<pre><code>##    A    B    C 
+## 2.76 0.00 0.50</code></pre>
+<pre class="r"><code>tapply(v, w, mean) # w の値の種類ごとの v の値の平均(mean)を集計</code></pre>
+<pre><code>##    A    B    C 
+## 1.38 0.00 0.50</code></pre>
+<pre class="r"><code>tapply(v, w, sum)/table(w) # w の値の種類ごとの v の値の総和/出現回数＝平均 を算出</code></pre>
+<pre><code>##    A    B    C 
+## 1.38 0.00 0.50</code></pre>
+<p>ベクトルの値の種類ごとの出現回数を集計するtable関数は、１行目：集計したベクトル名、２行目：値の種類、３行目：出現回数のように３行にわたって戻り値が表示されます。</p>
+<p>tapply関数はやや複雑ですが、第2引数(w)の値の種類ごとの第1引数(v)の値を第3引数の集計関数(sum,meanなど)で集計し、１行目：値の種類、２行目：集計値のように２行にわたって戻り値が表示されます。このように、引数にはベクトルだけでなく関数自体が入ることもあります。</p>
+<p>なお、table関数やtapply関数の戻り値は、値の種類を要素名（要素番号の代わり）とした集計値の数値ベクトルとして扱われ、上の最後の例のように数値ベクトルとして四則演算などに用いることができます。</p>
+</div>
+<div id="データフレームに使う関数" class="section level2">
+<h2>データフレームに使う関数</h2>
+<p>データフレームはベクトルを列結合したものであるため、以下のように列ごとにベクトルに対する関数が適用できます。</p>
+<pre class="r"><code>vw = data.frame(v = v, w = w) # ベクトル v と w を列結合したデータフレームを作成
+sum(vw$v) # vw$v の総和</code></pre>
+<pre><code>## [1] 3.26</code></pre>
+<pre class="r"><code>tapply(vw$v, vw$w, mean) # vw$w の値の種類ごとの vw$v の値の平均(mean)を集計</code></pre>
+<pre><code>##    A    B    C 
+## 1.38 0.00 0.50</code></pre>
+<p>ここではさらに、データフレームに対して良く使われる簡単な関数をいくつか紹介しておきます。</p>
+<ul>
+<li><p>nrowとncolは、データフレームの行数と列数を取得する関数。</p></li>
+<li><p>headとtailは、第1引数のデータフレームの先頭と末尾を第2引数の行数だけ取得する関数。</p></li>
+<li><p>rownamesとcolnamesは、データフレームの行名（行番号）と列名（変数名）を参照する関数。参照するだけでなく、全部または一部に別の文字列を代入して置き換えることもできます。</p></li>
+</ul>
+<p>以下にその例を示します。</p>
+<pre class="r"><code>nrow(vw) # データフレームの行数</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>ncol(vw) # データフレームの列数</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>head(vw,2) # データフレームの先頭2行を表示</code></pre>
+<pre><code>##       v w
+## 1 -1.24 A
+## 2  0.00 B</code></pre>
+<pre class="r"><code>tail(vw,3) # データフレームの末尾3行を表示</code></pre>
+<pre><code>##     v w
+## 2 0.0 B
+## 3 4.0 A
+## 4 0.5 C</code></pre>
+<pre class="r"><code>rownames(vw) # データフレームの行名</code></pre>
+<pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;</code></pre>
+<pre class="r"><code>colnames(vw)[2] = &quot;ABC&quot; # データフレームの列名（変数名）を一部置き換え
+colnames(vw) # データフレームの列名（変数名）</code></pre>
+<pre><code>## [1] &quot;v&quot;   &quot;ABC&quot;</code></pre>
+</div>
+<div id="パッケージ" class="section level2">
+<h2>パッケージ</h2>
+<p>最後に、パッケージをインストールして、パッケージ内の関数を利用する方法を解説します。 ここでは、日本人に便利な関数をまとめた<a href="https://uribo.hatenablog.com/entry/2019/12/02/163114">zipanguパッケージ</a>をインストールして、パッケージ内にある和暦を西暦に変換する関数convert_jyearを使ってみたいと思います。</p>
+<p>パッケージには初めからインストール済であるものもあります。下図の右下にあるPackagesタブで、インストール済のパッケージの一覧を見ることができます。一覧の中に目的のパッケージが無かったり、以前に目的のパッケージを使ってから長い年月が経っている（パッケージのバージョンが古い）場合には、次に解説する方法で目的のパッケージをインストールしましょう。</p>
+<p><img src="images/packages.png" style="width:70.0%" /></p>
+<p>パッケージのインストールは、Consoleタブにinstall.packages(“パッケージ名”)と入力して実行すれば、あとは下図のように自動でインストールが進みます。あるいは、Packagesタブの左上にあるInstallボタンをクリックして出てくる下図のウィンドウの中段にパッケージ名を入力し下のInstallボタンをクリックすると、Consoleタブにinstall.packages(“パッケージ名”)が自動入力されて同じようにインストールが始まります。</p>
+<p><img src="images/installpackages.png" style="width:70.0%" /></p>
+<p>インストールが完了すると、下図のようにPackagesタブの一覧にインストールしたパッケージ（zipangu）が追加されていることが確認できます。ただし、インストールが完了しただけではまだパッケージの関数を使うことはできません。パッケージを利用するには、Consoleタブにlibrary(パッケージ名)と入力して実行するか、Packagesタブの青字のパッケージ名の左にある四角をクリックしてチェックすることで、パッケージを読み込む必要があります。</p>
+<p><img src="images/zipangu.png" style="width:70.0%" /></p>
+<p>下図のようにzipanguパッケージが読み込まれたら、zipanguパッケージ内のconvert_jyear関数を使ってみましょう。convert_jyear関数は様々な形式の和暦を西暦へと変換する関数です。詳細はHelpタブを見るよりも<a href="https://uribo.hatenablog.com/entry/2019/12/02/163114">開発者による解説</a>を参照した方が分かりやすいです。下図では和暦“令和4年”をconvert_jyear関数に入れると西暦2022が返ってくる例を示しています。</p>
+<p><img src="images/convert_jyear.png" style="width:70.0%" /></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

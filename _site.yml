@@ -10,13 +10,20 @@ navbar:
       href: cloud.html
     - text: "基本操作"
       href: basics.html
+    - text: "オブジェクト"
+      href: object.html
+    - text: "関数"
+      href: function.html
+    - text: "ファイル入出力"
+      href: files.html
+    - text: "回帰分析と作図"
+      href: analysis.html
 output:
   html_document:
-    theme: readable
+    theme: default
     highlight: default
     toc: true
     toc_float: true
-    toc_depth: 2
-    df_print: "tibble"
+    toc_depth: 3
     css: site_style.css
 output_dir: "docs"

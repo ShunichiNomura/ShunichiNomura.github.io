@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>オブジェクト</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RStudio入門</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">はじめに</a>
+</li>
+<li>
+  <a href="install.html">インストール</a>
+</li>
+<li>
+  <a href="cloud.html">RStudio Cloud</a>
+</li>
+<li>
+  <a href="basics.html">基本操作</a>
+</li>
+<li>
+  <a href="object.html">オブジェクト</a>
+</li>
+<li>
+  <a href="function.html">関数</a>
+</li>
+<li>
+  <a href="files.html">ファイル入出力</a>
+</li>
+<li>
+  <a href="analysis.html">回帰分析と作図</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">オブジェクト</h1>
+
+</div>
+
+
+<div id="オブジェクトとは" class="section level2">
+<h2>オブジェクトとは</h2>
+<p>Rでは、殆どのプログラム言語と同様に、xなどの変数に値を代入してその後の命令文に使用することができ、これをオブジェクトと呼びます。オブジェクトの定義（値の代入）は、下図のように命令文「オブジェク名 &lt;- 値」または「オブジェク名 = 値」により行われます。オブジェク名に使用できる文字は、半角英数、ピリオド(.)、アンダーバー(_)と全角文字で、半角英字の大文字と小文字は区別されます。ただし、オブジェクト名の先頭は、半角英字か全角文字でなければなりません。</p>
+<p><img src="images/object.png" style="width:75.0%" /></p>
+<p>定義されたオブジェクトは、Consoleタブにオブジェクト名だけ入力して実行すれば、その値を確認できます。ただし、定義されたオブジェクトは右上のEnvironmentタブに一覧表示されますので、Consoleタブを使わずとも何という名前のオブジェクトに大まかに何が入っているかを確認することができます。</p>
+</div>
+<div id="ワークスペース" class="section level2">
+<h2>ワークスペース</h2>
+<p>Environmentタブに列挙されている全オブジェクトは、まとめて「ワークスペース」と呼ばれる拡張子.RDataのファイル形式で下図のように保存することができます。保存されたワークスペースは、右上のEnvironmentタブ内のフォルダから矢印が出たアイコンをクリックして選択するか、右下のFilesタブ内のワークスペースのファイル(.RDataファイル)をクリックすることで読み込むことができます。</p>
+<p><img src="images/workspace.png" style="width:75.0%" /></p>
+<p>なお、アプリケーションのRStudioを閉じる際には下図のように現在のワークスペースを保存するかどうか聞かれ、Saveボタンをクリックして場合には“.RData”というファイル名でワークスペースが（上書き）保存されます。 一般に、プロジェクトを開いたときにはそのプロジェクトのフォルダにある“.RData”のワークスペースが読み込まれた状態でRStudioが起動することになります。したがって、“.RData”を異なるファイル名（たとえば“a.RData”）に改名したり削除したりすれば、ワークスペースが読み込まれずオブジェクトの何もない状態でプロジェクトが起動することになります。</p>
+<p><img src="images/saveimage.png" style="width:30.0%" /></p>
+</div>
+<div id="ベクトル" class="section level2">
+<h2>ベクトル</h2>
+<p>Rでは、殆どのプログラム言語と同様に、オブジェクトに複数の値を代入することができます。 オブジェクトに複数の値を持たせる形式はいろいろとあり、まず最も代表的なベクトルとその基本的な扱い方を紹介します。</p>
+<div id="ベクトルの作成" class="section level3">
+<h3>ベクトルの作成</h3>
+<p>ベクトルとは、同じ型（後述）の値を持つ要素を１列に並べたものです。上図の１つの値しか持たないオブジェクトも、実は要素数１のベクトルとして扱われます。ベクトルを作成する最も代表的な３つの方法とその例を以下に示します。</p>
+<ul>
+<li><p>c(要素1, 要素2, 要素3,…) で、要素1, 要素2, 要素3,…のベクトルが作成されます。</p></li>
+<li><p>rep(要素, 繰り返し数) で、同じ要素を繰り返し数だけ並べたベクトルが作成されます。</p></li>
+<li><p>最初の整数:最後の整数 で、最初の整数から最後の整数まで1ずつずらした整数列のベクトルが作成されます。</p></li>
+</ul>
+<pre class="r"><code>c(1,2,3,4) # c(要素1, 要素2, 要素3, 要素4)</code></pre>
+<pre><code>## [1] 1 2 3 4</code></pre>
+<pre class="r"><code>rep(1,5) # rep(繰り返す要素, 繰り返し数)</code></pre>
+<pre><code>## [1] 1 1 1 1 1</code></pre>
+<pre class="r"><code>1:100 # 最初の整数:最後の整数</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
+##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
+##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
+<p>上には灰色枠内の命令文をそれぞれ実行した結果が白枠内にRStudioのConsoleタブと同じ形式（各行頭に##が付くことを除く）で表示されています。 ベクトルは上の白枠内のように、左から順に要素が一定間隔で並べられて表示されます。 最後の1:100（1から100までの整数列）の例のように要素数が多いときには、途中で改行されて複数行にわたって表示され、各行の先頭には[行の最初の要素の要素番号]が表示されます。</p>
+</div>
+<div id="ベクトルの代入と参照" class="section level3">
+<h3>ベクトルの代入と参照</h3>
+<p>上のように作成されたベクトルは、そのままオブジェクトに代入することができます。 ベクトルの代入されたオブジェクト（ベクトル）について以下のように、ベクトル名[参照したい要素番号（整数値 or 整数ベクトル）] のように入力することで、指定した要素番号の要素だけを参照して表示あるいは代入することができます。</p>
+<pre class="r"><code>a = c(10,20,30,40,50) # オブジェクト（ベクトル）a を定義
+a # ベクトル a の全要素を表示</code></pre>
+<pre><code>## [1] 10 20 30 40 50</code></pre>
+<pre class="r"><code>a[2] # ベクトル a の2番目の要素を表示</code></pre>
+<pre><code>## [1] 20</code></pre>
+<pre class="r"><code>a[5:1] # ベクトル a の5,4,3,2,1番目の要素を順に表示</code></pre>
+<pre><code>## [1] 50 40 30 20 10</code></pre>
+<pre class="r"><code>a[c(1,3)] = a[c(3,1)] # ベクトル a の3,1番目の要素をベクトル a の1,3番目の要素へと代入
+a # ベクトル a の1,3番目の要素が入れ替わっていることを確認</code></pre>
+<pre><code>## [1] 30 20 10 40 50</code></pre>
+<pre class="r"><code>a[c(1,3)] = c(10,30) # ベクトル a の1,3番目の要素に10,30を代入
+a # ベクトル a が元に戻っていることを確認</code></pre>
+<pre><code>## [1] 10 20 30 40 50</code></pre>
+<p>ベクトルの一部要素を参照するもう一つの重要な方法として条件指定があります。以下に例示する比較演算子を用いて、ベクトル名[条件式（左辺 比較演算子 右辺）] のように入力することで、条件式を満たす要素番号の要素だけを参照することができます（厳密には、後述する論理値のベクトルであれば条件式でなくて構いません）。</p>
+<ul>
+<li><p>==：左辺と右辺が等しい</p></li>
+<li><p>!=：左辺と右辺が等しくない</p></li>
+<li><blockquote>
+<p>=：左辺が右辺以上である</p>
+</blockquote></li>
+<li><p>&lt;=：左辺が右辺以下である</p></li>
+<li><blockquote>
+<p>：左辺が右辺を上回る</p>
+</blockquote></li>
+<li><p>&lt;：左辺が右辺を下回る</p></li>
+</ul>
+<p>-%in%：左辺が右辺の要素のいずれかと等しい</p>
+<pre class="r"><code>a[a &gt;= 30] # 3以上である a の要素を参照</code></pre>
+<pre><code>## [1] 30 40 50</code></pre>
+<pre class="r"><code>b = c(50,40,30,20,10) # オブジェクト（ベクトル）b を定義
+a[a == b] # a と b の要素が等しい要素番号(3番目)における a の要素を参照</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>a[b %in% c(10,30)] # b が 10,30 のいずれかと等しい要素番号(3,5番目)における a の要素を参照</code></pre>
+<pre><code>## [1] 30 50</code></pre>
+</div>
+<div id="ベクトルの四則演算" class="section level3">
+<h3>ベクトルの四則演算</h3>
+<p>ベクトルはそのまま要素ごとの四則演算に用いることができ、複数の数値をまとめて素早く計算できる大きな利点があります。</p>
+<pre class="r"><code>a + b # ベクトル同士の足し算</code></pre>
+<pre><code>## [1] 60 60 60 60 60</code></pre>
+<pre class="r"><code>a * b # ベクトル同士の足し算</code></pre>
+<pre><code>## [1] 500 800 900 800 500</code></pre>
+<pre class="r"><code>a - 10 # ベクトル a の各要素から 10 を引く</code></pre>
+<pre><code>## [1]  0 10 20 30 40</code></pre>
+<pre class="r"><code>a / 10 # ベクトル a の各要素を 10 で割る</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+</div>
+</div>
+<div id="データの型" class="section level2">
+<h2>データの型</h2>
+<p>ここまでのオブジェクトは全て数値を扱ってきましたが、数値以外の「型」のデータも扱うことができます。データの型には多種多様なものがありますが、ここでは最も基礎的な以下の４つのみ紹介します。</p>
+<ul>
+<li><p>整数(integer)：整数のみからなるベクトルの型。ただし扱い方は次の数値型と全く変わらないので区別する必要はない。</p></li>
+<li><p>数値(numeric)：整数以外も含んだ数値からなるベクトルの型。</p></li>
+<li><p>文字列(character)：文字列なるベクトルの型。ダブルクォーテーション"“で囲まれたものが1つの文字列と見なされる（”"のみなら空の文字列として扱われる）。</p></li>
+<li><p>論理値(logical)：TRUE(Tと略記可)とFALSE(Fと略記可)のいずれかの値しか取らないベクトルの型。これらはTRUE=T=1, FALSE=F=0の数値としても扱える（文字列としては扱えない）。上の「ベクトルの要素参照」で扱った 条件式（左辺 比較演算子 右辺） はそれ自体が論理値からなるベクトルとして扱われる。</p></li>
+</ul>
+<p>以下に例を挙げます。ここで、オブジェクトにデータを代入する命令文全体を丸括弧()で括ることで、以下のように代入と同時に代入された内容を表示されることができます。</p>
+<pre class="r"><code>(a1 = 1:5) # 整数型のベクトル</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code>(a2 = rep(1/3, 3)) # 数値型のベクトル</code></pre>
+<pre><code>## [1] 0.3333333 0.3333333 0.3333333</code></pre>
+<pre class="r"><code>(a3 = c(&quot;&quot;,&quot;a b c&quot;,&quot;あ　い&quot;)) # 文字列型のベクトル</code></pre>
+<pre><code>## [1] &quot;&quot;       &quot;a b c&quot;  &quot;あ　い&quot;</code></pre>
+<pre class="r"><code>(a4 = a1 &gt;= 3) # 論理値型のベクトル</code></pre>
+<pre><code>## [1] FALSE FALSE  TRUE  TRUE  TRUE</code></pre>
+<p>複数の要素を持つベクトルはEnvironmentタブのオブジェクト一覧において下図のように</p>
+<p>オブジェクト名 | データの型 [1:要素数] 要素1 要素2 要素3 …</p>
+<p>の様式で表示されます。データの型はint:整数、num:数値、chr:文字列、logi:論理値のように略称で表記されます。</p>
+<p><img src="images/type.png" style="width:75.0%" /></p>
+</div>
+<div id="データフレーム" class="section level2">
+<h2>データフレーム</h2>
+<p>オブジェクトに複数の値を持たせる形式としてはベクトルの他に「データフレーム」もよく利用されます。データフレームは一言で言うと「同じ要素数のベクトルを列ごとに並べた表形式のデータ」であり、csvファイルなどの表形式のデータを読み込んで扱うのに適した形式となっています。</p>
+<p>ここではファイル読み込みを経ずにデータフレームを新規に作成する方法のみ解説し、作成済のデータフレームの扱い方については後の「ファイル入出力」にて解説します。</p>
+<div id="データフレームの作成" class="section level3">
+<h3>データフレームの作成</h3>
+<p>データフレームは上述の通り「同じ要素数のベクトルを列ごとに並べたもの」として次のように作成します。</p>
+<p>data.frame(列名1 = ベクトル1, 列名2 = ベクトル2, 列名3 = ベクトル3,…)</p>
+<p>上記の各ベクトルは、要素数さえ同じであれば、データの型がベクトル間で異なっていても構いません。以下に例を示します。</p>
+<pre class="r"><code>dat = data.frame(ID = 1:4,
+                 性別 = c(&quot;女性&quot;,&quot;男性&quot;,&quot;女性&quot;,&quot;男性&quot;),
+                 年齢 = c(35,28,42,51))
+dat # 作成したデータフレームを表示</code></pre>
+<pre><code>##   ID 性別 年齢
+## 1  1 女性   35
+## 2  2 男性   28
+## 3  3 女性   42
+## 4  4 男性   51</code></pre>
+<p>上の例では、ID, 性別, 年齢の３つの変数(variables)をもつ４つの観測データ(observation)からなるデータフレーム dat を作成しました。作成したデータフレームを表示すると、定義した順に変数が列に並び、変数名の下に４つの観測データの行が並んでいます。</p>
+<p>作成されたデータフレームは下図のようにEnvironmentタブに表示されます。データフレーム名(dat)の右には観測データ(obs.)の数と変数(variables)の数が表示され、さらに右にある表の形をしたアイコンをクリックすると、左上にデータフレームが表形式で表示されます（これをデータビューと言います）。データビューはConsoleタブ上で Vier(データフレーム名) と入力して実行することでも開くことができます。さらに、下図のデータビュー内にある表に矢印が付いたアイコンをクリックすることで、データビューを別ウィンドウで開くこともできます。</p>
+<p>また、Environmentタブのデータフレーム名(dat)の左隣にある丸囲み三角をクリックすると、下図のように各変数について 変数名：データ型 要素1,要素2,… の形で内容を見ることができます。もう一度、丸囲み三角をクリックすれば各変数の欄は閉じられます。</p>
+<p><img src="images/dataview.png" style="width:75.0%" /></p>
+</div>
+<div id="データフレームの代入と参照" class="section level3">
+<h3>データフレームの代入と参照</h3>
+<p>データフレームは、行と列の表形式にデータが並んでいるため、その要素は</p>
+<p>データフレーム名[行番号のベクトル, 列番号or列の変数名(""で囲む)のベクトル]</p>
+<p>の形で参照して表示あるいは代入することができます。このとき、行あるいは列の指定を省略すると、全ての行あるいは列を参照することになります。</p>
+<pre class="r"><code>dat[1,2] = &quot;男性&quot; # 1行目2列目のデータに&quot;男性&quot;を代入
+dat[1,] # 1行目全列のデータを表示</code></pre>
+<pre><code>##   ID 性別 年齢
+## 1  1 男性   35</code></pre>
+<pre class="r"><code>dat[1,2] = &quot;女性&quot; # 1行目2列目のデータに&quot;女性&quot;を代入して戻す
+dat[,c(&quot;性別&quot;,&quot;年齢&quot;)] # 全行の性別, 年齢のデータを表示</code></pre>
+<pre><code>##   性別 年齢
+## 1 女性   35
+## 2 男性   28
+## 3 女性   42
+## 4 男性   51</code></pre>
+<pre class="r"><code>dat[1:2,2:3] # 1,2行目2,3列目のデータを表示</code></pre>
+<pre><code>##   性別 年齢
+## 1 女性   35
+## 2 男性   28</code></pre>
+<p>もう１つ、データフレームでは データフレーム名$変数名 により指定した変数名の列だけ参照することができます。RStudioでは「データフレーム名$」まで入力した時点で下図のように変数名の候補が表示され、参照したい変数名をクリックすることで変数名が自動入力されます。データフレームは各変数のベクトルを列結合して構成されているため、１つの列（変数）を参照したときはベクトルとして参照されます。</p>
+<p><img src="images/autocomp.png" style="width:40.0%" /></p>
+<p>データフレームから参照する行は、行番号でなく条件式（論理値のベクトル）で指定することもでき、以下のように条件式による行の絞り込みのために頻繁に用いられます。</p>
+<pre class="r"><code>female = dat[dat$性別 == &quot;女性&quot;, ] # 性別が女性の行だけ抽出して female に代入
+female</code></pre>
+<pre><code>##   ID 性別 年齢
+## 1  1 女性   35
+## 3  3 女性   42</code></pre>
+<pre class="r"><code>over30 = dat[dat$年齢 &gt;= 30, ] # 年齢が30歳以上の抽出して over30 に代入
+over30</code></pre>
+<pre><code>##   ID 性別 年齢
+## 1  1 女性   35
+## 3  3 女性   42
+## 4  4 男性   51</code></pre>
+</div>
+<div id="データフレームの列追加" class="section level3">
+<h3>データフレームの列追加</h3>
+<p>データフレームは一旦定義した後から、次のようにして列（変数）を新たに追加することができます。</p>
+<p>データフレーム名$変数名 = ベクトル</p>
+<p>たとえば以下のようにして、女性か否かを論理値(TRUE or FALSE)で表す列が新たに追加されます。</p>
+<pre class="r"><code>dat$女性か否か = dat$性別 == &quot;女性&quot;
+dat</code></pre>
+<pre><code>##   ID 性別 年齢 女性か否か
+## 1  1 女性   35       TRUE
+## 2  2 男性   28      FALSE
+## 3  3 女性   42       TRUE
+## 4  4 男性   51      FALSE</code></pre>
+</div>
+<div id="データフレームの四則演算" class="section level3">
+<h3>データフレームの四則演算</h3>
+<p>データフレームは前述の通り各列（変数）がベクトルとして扱われるため、個々の列（変数）を参照してベクトルと同様に四則演算に用いることが可能です。</p>
+<pre class="r"><code>dat$年齢 + 10 # 10年後の年齢</code></pre>
+<pre><code>## [1] 45 38 52 61</code></pre>
+<p>しかし、行ごとにはたとえデータの型が同じであろうとベクトルとして扱うことができず、個々の行や複数の列を参照して四則演算に用いるとエラーとなりますので注意してください。</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

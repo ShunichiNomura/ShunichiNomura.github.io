@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -330,6 +330,18 @@ div.tocify {
 <li>
   <a href="basics.html">基本操作</a>
 </li>
+<li>
+  <a href="object.html">オブジェクト</a>
+</li>
+<li>
+  <a href="function.html">関数</a>
+</li>
+<li>
+  <a href="files.html">ファイル入出力</a>
+</li>
+<li>
+  <a href="analysis.html">回帰分析と作図</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -343,7 +355,6 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">RStudio Cloud</h1>
-<h4 class="date">最終更新: 2022-03-06</h4>
 
 </div>
 
@@ -354,10 +365,10 @@ div.tocify {
 <p>Webブラウザ上でRStudioを扱うことのできるクラウドサービスです。Webブラウザ上でアクセスするサーバー上でRStudioを動かすため、OS(Windows/mac)などのコンピュータ環境の違いによるトラブルや動作の違いは起こらず、使用するコンピュータを変えても同一の結果を得ることができます。</p>
 <p>RStudio Cloudには無料アカウント（Free plan）と有料アカウント（数種類のplan）があり、無料アカウントの場合には利用にあたり以下の制限があることに注意してください。</p>
 <ul>
-<li><p>月の利用時間上限が２５時間（一部の有料アカウントでは無制限）</p></li>
-<li><p>保存できるプロジェクト数上限が５０個（一部の有料アカウントでは無制限）</p></li>
-<li><p>1つの命令実行時間の上限が１時間（一部の有料アカウントでは４８時間）</p></li>
-<li><p>利用できるメモリ量は１GB（一部の有料アカウントでは１６GB）</p></li>
+<li><p>月の利用時間上限が25時間（一部の有料アカウントでは無制限）</p></li>
+<li><p>保存できるプロジェクト数上限が50個（一部の有料アカウントでは無制限）</p></li>
+<li><p>1つの命令文の実行時間の上限が1時間（一部の有料アカウントでは48時間）</p></li>
+<li><p>利用できるメモリ量は1GB（一部の有料アカウントでは16GB）</p></li>
 </ul>
 <p>もし、月の利用時間上限に引っかかってしまった場合は、別のアカウントを作成して利用するか、有料アカウントを持っている方の共有スペース(Shared Space)からRStudio Cloudを利用することができます。</p>
 </div>
@@ -366,14 +377,14 @@ div.tocify {
 <p><a href="https://login.rstudio.cloud/register?redirect=https%3A%2F%2Fclient.login.rstudio.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D0">下図のSign Upページ</a>から以下のいずれかの方法でアカウントを登録してください。</p>
 <p><img src="images/signup.png" style="width:40.0%" /></p>
 <div id="一般のemailアドレスで登録する方法" class="section level3">
-<h3>１．一般のEmailアドレスで登録する方法</h3>
-<p>Email, Password, First name, Last nameを入力して“Sign Up”ボタンをクリックすると、下図のVerify Your Emailというページに遷移するので、入力したEmailアドレスに差出人“noreply@rstudio.cloud”から件名“Please verify your email address”のメールが届いているのを確認し、メール本文中の“Verify your email”と書かれたリンクをクリックしてください（７２時間経過するとリンクが無効となりますのでご注意ください）。</p>
+<h3>一般のEmailアドレスで登録する方法</h3>
+<p>Email, Password, First name, Last nameを入力して“Sign Up”ボタンをクリックすると、下図のVerify Your Emailというページに遷移するので、入力したEmailアドレスに差出人“noreply@rstudio.cloud”から件名“Please verify your email address”のメールが届いているのを確認し、メール本文中の“Verify your email”と書かれたリンクをクリックしてください（72時間経過するとリンクが無効となりますのでご注意ください）。</p>
 <p><img src="images/verifyemail.png" style="width:40.0%" /></p>
 <p>クリックしたリンクから下図のページが表示されれば登録完了です。</p>
 <p><img src="images/verified.png" style="width:40.0%" /></p>
 </div>
 <div id="googleアカウントで登録する方法" class="section level3">
-<h3>２．Googleアカウントで登録する方法</h3>
+<h3>Googleアカウントで登録する方法</h3>
 <p>“Sign Up with Google”をクリックすると、上部に“Googleにログイン”と書かれたページに遷移するので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。その結果、ログイン後の画面が現れれば登録完了です。</p>
 </div>
 </div>
@@ -382,12 +393,12 @@ div.tocify {
 <p>アカウントの登録完了後は、<a href="https://login.rstudio.cloud/">下図のLog Inページ</a>から以下のようにログインしてください。</p>
 <p><img src="images/login.png" style="width:40.0%" /></p>
 <div id="一般のemailアドレスで登録している場合" class="section level3">
-<h3>１．一般のEmailアドレスで登録している場合</h3>
+<h3>一般のEmailアドレスで登録している場合</h3>
 <p>Email欄に登録したEmailアドレスを入力して“Continue”をクリックし、遷移したページのPassword欄にPasswordを入力して“Log In”をクリックしてください。すると、下図のような利用サービスを選択するページに遷移しますので、“RStudio Cloud”をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。</p>
 <p><img src="images/destination.png" style="width:40.0%" /></p>
 </div>
 <div id="googleアカウントで登録している場合" class="section level3">
-<h3>２．Googleアカウントで登録している場合</h3>
+<h3>Googleアカウントで登録している場合</h3>
 <p>“Log In with Google”をクリックすると、上部に“Googleにログイン”と書かれたページに移るので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。すると、上図のような利用サービスを選択するページに遷移しますので、“RStudio Cloud”をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。</p>
 </div>
 </div>
@@ -448,7 +459,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
