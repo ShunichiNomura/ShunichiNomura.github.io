@@ -49,15 +49,15 @@ RStudioのインストール方法もインストールするパソコンのOS(W
 
 ### Windowsの場合
 
-Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"DOWNLOAD RSTUDIO FOR WINDOWS"をクリックして"RStudio-2022.02.0-443.exe"をダウンロードする。
+Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"DOWNLOAD RSTUDIO FOR WINDOWS"をクリックして"RStudio-2022.02.1-461.exe"をダウンロードする。
 
-Step.2： ダウンロードした"RStudio-2022.02.0-443.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
+Step.2： ダウンロードした"RStudio-2022.02.1-461.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
 
 Step.3： 「RStudio セットアップ」と上に書かれたウィンドウが現れるので、下に現れる「次へ」「インストール」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。
 
 ### Macの場合
 
-Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"RStudio-2022.02.0-443.dmg"をクリックして当該ファイルをダウンロードする。
+Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"RStudio-2022.02.1-461.dmg"をクリックして当該ファイルをダウンロードする。
 
 Step.2： ダウンロードしたpkgファイルを「アプリケーションで開く：DiskImageMounter」で開くと、"RStudio.app"アイコンと"Applications"へのショートカットアイコンの入ったフォルダ(Finder)が開くので、"RStudio.app"アイコンを"Applications"へのショートカットアイコンへとドラッグする。
 
