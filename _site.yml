@@ -13,7 +13,7 @@ navbar:
       href: object.html
     - text: "関数"
       href: function.html
-    - text: "ファイル入出力"
+    - text: "データ入出力"
       href: files.html
     - text: "回帰と作図"
       href: analysis.html

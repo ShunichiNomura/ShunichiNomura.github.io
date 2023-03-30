@@ -1,5 +1,5 @@
 ---
-title: "ファイル入出力"
+title: "データ入出力"
 output:
   html_document:
     toc: true
