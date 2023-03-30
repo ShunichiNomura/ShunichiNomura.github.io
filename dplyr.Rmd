@@ -1,0 +1,216 @@
+---
+title: "dplyrによるデータ操作"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    collapsed: false
+    number_sections: false
+    toc_depth: 3
+    #code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+library(dplyr)
+library(ggplot2)
+```
+
+## dplyrとは
+
+データを分析するにあたり、絞り込み、列の追加・削除、集計などデータフレームの操作が必要になることが多いです。このようなデータ操作にはdplyrパッケージを利用すると便利です。
+
+dplyrを利用するにはまずdplyrパッケージのインストールと読み込みを行ってください。
+
+```{r, eval=FALSE}
+install.packages("dplyr")
+library(dplyr)
+```
+
+## パイプ演算子'%>%'
+
+dplyrパッケージを使いこなすには、パイプ演算子%>%が不可欠です。
+パイプ演算子%>%は、演算子の左にあるオブジェクトを、演算子の右にある関数の第1引数へと挿入します。
+たとえば次のコードは、iris（アヤメのデータ）の先頭5行を表示するのにパイプ演算子%>%を利用しています。
+
+```{r}
+# irisデータの先頭5行を表示
+iris %>% head(5) # head(iris,5)と同じ
+```
+
+上の例ではパイプ演算子%>%の良さが分かりづらいですが、これから紹介するdplyrパッケージの関数はいずれもデータフレームを第1引数に取った上で加工後のデータフレームを返す関数となっているため、以下の形式で連鎖的にデータフレームを操作することができます。
+
+| データフレーム %>% 
+|     dplyrパッケージの関数(他の引数) %>% 
+|     dplyrパッケージの関数(他の引数) %>% 
+|     ・・・
+
+なお、加工した最終結果をオブジェクトに保存したい場合は、1行目を「オブジェクト名 = データフレーム %>%」としてください。
+
+これから紹介する関数の使用例を通じてパイプ演算子%>%の威力を感じていただけたらと思います。
+
+## ソート（arrange関数）
+
+まずは、データフレームの行をある列（変数）の昇順あるいは降順に並べ替えたいときには、arrange関数を用います。
+
+昇順のソート：データフレーム %>% arrange(列名)
+
+降順のソート：データフレーム %>% arrange(desc(列名))
+
+複数列でのソート：データフレーム %>% arrange(列名1, 列名2,...)
+
+例として、irisデータをSepal.Length(がく片の長さ)でソートしてからその先頭5行を表示します。
+
+```{r}
+# 昇順ソートして先頭5行を表示
+iris %>% arrange(Sepal.Length) %>% head(5) # head(arrange(iris,Sepal.Length),5)と同じ
+```
+
+
+```{r}
+# 降順ソートして先頭5行を表示
+iris %>% arrange(desc(Sepal.Length)) %>% head(5)
+```
+
+
+```{r}
+# アヤメの種類名の昇順、がく片の長さの降順でソートして先頭5行を表示
+iris %>% arrange(Species, desc(Sepal.Length)) %>% head(5)
+```
+
+上の例ではパイプ演算子%>%を複数回使っており、パイプ演算子%>%を使わないと関数と引数が入り混じって見づらいように感じます。
+
+## 列の絞り込み（select関数）
+
+データフレームから指定した列のみ抽出したいとき、次のselect関数を用います。
+
+データフレーム %>% select(抽出する列名1, 抽出する列名2,...)
+
+```{r}
+# アヤメの花びらの長さと幅のみ抽出して列平均(colMeans)を表示
+iris %>% select(Petal.Length, Petal.Width) %>% colMeans
+```
+逆に、指定した列のみ除外したい場合は、列名にマイナス符号を付けます。
+
+データフレーム %>% select(-抽出しない列名1, -抽出しない列名2,...)
+
+```{r}
+# アヤメの種類を除外して列平均(colMeans)を表示
+iris %>% select(-Species) %>% colMeans
+```
+
+最後に、抽出した列名の名前を変えることもできます。
+
+データフレーム %>% select(新たな列名1 = 抽出する列名1, 新たな列名2 = 抽出する列名2,...)
+
+```{r}
+# アヤメの花びらの長さと幅のみ抽出し、列名変更して列平均(colMeans)を表示
+iris %>% select(Length = Petal.Length, Width = Petal.Width) %>% colMeans
+```
+
+## 行の絞り込み（filter関数）
+
+データフレームから条件に合う行のみ抽出したいとき、次のfilter関数を用います。
+
+データフレーム %>% filter(条件式)
+
+これはデータフレーム[条件式,]と書くことでも同じことができますが、filter関数を用いることで次の例のように他の関数とパイプ演算子%>%で連鎖させることができます。
+
+```{r}
+# アヤメの種類"setosa"の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %>% 
+  filter(Species == "setosa") %>% 
+  select(-Species) %>% 
+  colMeans
+```
+
+複数の条件を全て満たす行を抽出したいときは、条件式をアンド'&'もしくはカンマ','で繋ぎます。
+
+データフレーム %>% filter(条件式1 & 条件式2,...)
+
+```{r}
+# アヤメの種類"setosa"かつがく片の長さ5未満の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %>% 
+  filter(Species == "setosa" & Sepal.Length < 5) %>% 
+  select(-Species) %>% 
+  colMeans
+```
+
+最後に、複数の条件のいずれかを満たす行を抽出したいときは、条件式を縦棒'|'で繋ぎます。
+
+データフレーム %>% filter(条件式1 | 条件式2,...)
+
+```{r}
+# アヤメの種類"setosa"または"verginica"の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %>% 
+  filter(Species == "setosa" | Species == "virginica") %>%
+  select(-Species) %>% 
+  colMeans
+# 上記のコード
+iris %>% 
+  filter(Species %in% c("setosa","virginica")) %>%
+  select(-Species) %>% 
+  colMeans
+
+```
+
+なお、上の例は演算子%in%（左辺が右辺の要素のいずれかと等しい）を用いて次のように書くこともできます。
+
+```{r}
+# アヤメの種類"setosa"または"verginica"の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %>% 
+  filter(Species %in% c("setosa","virginica")) %>%
+  select(-Species) %>% 
+  colMeans
+```
+
+## 列の追加（mutate関数）
+
+データフレームに新たな列を追加したいときは、次のmutate関数を用います。
+
+データフレーム %>% mutate(追加する列名1 = データ1, 追加する列名2 = データ2,...)
+
+次の例では、がく片の長さと幅の比率 Sepal.LWR、花びらの長さと幅の比率 Petal.LWR を列追加したデータフレームを、パイプ演算子%>%でggplot関数へと入れて散布図を描いています。
+
+```{r}
+# アヤメのがく片および花びらの長さと幅の比率を列追加し、その散布図を表示
+iris %>% 
+  mutate(Sepal.LWR = Sepal.Length/Sepal.Width, Petal.LWR = Petal.Length/Petal.Width) %>% 
+  ggplot(aes(x=Sepal.LWR, y=Petal.LWR, col=Species, shape=Species)) + geom_point()
+```
+
+## 集計（summarise関数）
+
+上のいくつかの例ではcolMeans関数を用いて列平均を集計していましたが、次のsummarise関数を用いて特定の列を特定の方法で集計することもできます。
+
+データフレーム %>% summarise(新たな列名1 = 関数(列名1), 新たな列名2 = 関数(列名2),...)
+
+上の関数には、length(データ数), mean(平均), sum(合計), min(最小値), max(最大値), median(中央値)など通常のベクトルを集計する関数はほぼ使えます。
+
+summarise関数からは次の例のように、新たな列名ごとに集計値が入ったデータフレームが返されます。
+
+```{r}
+# アヤメの花びらの幅のデータ数、平均、中央値を集計
+iris %>% 
+  summarise(n = length(Petal.Width), mean = mean(Petal.Width), med = median(Petal.Width))
+```
+
+## 集計時のグループ化（group_by関数）
+
+上に紹介したsummarise関数は、集計する区分を設ける次のgroup_by関数と併用することで大幅に利便性が増します。
+
+| データフレーム %>%
+|   group_by(集計を区分する列名1, 集計を区分する列名2,...) %>%
+|   summarise(新たな列名1 = 関数(列名1), 新たな列名2 = 関数(列名2),...)
+
+たとえば1つ前の例に、次のように group_by(Species) を挿入することで、アヤメの種類ごとに集計されるようになります。集計区分に使われた列Speciesが最初に表示され、Speciesのカテゴリごとに集計されていることが分かります。
+
+```{r}
+# アヤメの花びらの幅のデータ数、平均、中央値を、アヤメの種類ごとに集計
+iris %>% 
+  group_by(Species) %>%
+  summarise(n = length(Petal.Width), mean = mean(Petal.Width), med = median(Petal.Width))
+```
+
+
+

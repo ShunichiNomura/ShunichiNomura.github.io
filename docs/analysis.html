@@ -13,7 +13,7 @@
 
 <title>回帰分析と作図</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="site_style.css" type="text/css" />
 
 
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -141,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -309,7 +310,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -325,7 +326,7 @@ div.tocify {
   <a href="install.html">インストール</a>
 </li>
 <li>
-  <a href="cloud.html">RStudio Cloud</a>
+  <a href="cloud.html">Posit Cloud</a>
 </li>
 <li>
   <a href="basics.html">基本操作</a>
@@ -341,6 +342,12 @@ div.tocify {
 </li>
 <li>
   <a href="analysis.html">回帰分析と作図</a>
+</li>
+<li>
+  <a href="ggplot2.html">ggplot2による作図</a>
+</li>
+<li>
+  <a href="dplyr.html">dplyrによるデータ操作</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -362,55 +369,69 @@ div.tocify {
 <p>最後にこちらでは、RStudioにおける回帰分析と作図を簡単に紹介いたします。</p>
 <div id="回帰分析" class="section level2">
 <h2>回帰分析</h2>
-<p>回帰分析とは、データの変数間の関係式（回帰式と言います）を推定する分析です。回帰分析では、ある予測したい変数（目的変数）を、目的変数と相関をもつ他の変数（説明変数1, 説明変数2,…）を用いて</p>
-<p>目的変数 ＝ 切片 ＋ 回帰係数1 × 説明変数1 ＋ 回帰係数2 × 説明変数2 ＋・・・＋ 誤差</p>
+<p>回帰分析とは、データの変数間の関係式（回帰式と言います）を推定する分析です。回帰分析では、ある予測したい変数（目的変数）を、目的変数と相関をもつ他の変数（説明変数1,
+説明変数2,…）を用いて</p>
+<p>目的変数 ＝ 切片 ＋ 回帰係数1 × 説明変数1 ＋ 回帰係数2 × 説明変数2
+＋・・・＋ 誤差</p>
 <p>の形で表現し、誤差がなるべく小さくなるように切片と回帰係数を推定します。Rではlm関数を使ってこの回帰分析を次のように1行で実行することができます。</p>
 <p>lm(目的変数名 ~ 説明変数名1 + 説明変数名2 + …, データフレーム名)</p>
-<p>例として、ファイル入出力の例で作成したデータフレームmansionについて、目的変数を 単位面積あたり取引価格(取引価格.総額./面積…)、説明変数を築年数として回帰してみましょう。この回帰分析は、次の命令文により実行することができます。</p>
+<p>例として、ファイル入出力の例で作成したデータフレームmansionについて、目的変数を
+単位面積あたり取引価格(取引価格.総額./面積…)、説明変数を築年数として回帰してみましょう。この回帰分析は、次の命令文により実行することができます。</p>
 <p>lm(取引価格.総額./面積… ~ 築年数, mansion)</p>
 <p>上記のように、目的変数は複数の変数（取引価格.総額.と面積…）を組合せて用意することもできます。上記の命令文の実行結果を下図に示します。</p>
 <p><img src="images/lm.png" style="width:80.0%" /></p>
 <p>上図のように、実行結果の前半2行には命令文自体が表示され、後半3行に切片と回帰係数の推定値が表示されます。結果として、単位面積あたり取引価格(取引価格.総額./面積…)を予測する回帰式は</p>
-<p>単位面積あたり取引価格 ＝ 切片 ＋ 回帰係数 × 築年数 ＋ 誤差 ＝ 1553922 － 15189 × 築年数 ＋ 誤差</p>
-<p>と推定されたことになります。この回帰式から、千代田区の中古マンション等の単位面積あたり取引価格は、築年数0年なら約155.4万円で、築年数が1年多いごとに約1.5万円ずつ下がる傾向にあると予測されることになります。</p>
+<p>単位面積あたり取引価格 ＝ 切片 ＋ 回帰係数 × 築年数 ＋ 誤差 ＝
+1641797 － 18001 × 築年数 ＋ 誤差</p>
+<p>と推定されたことになります。この回帰式から、千代田区の中古マンション等の単位面積あたり取引価格は、築年数0年なら約164.2万円で、築年数が1年多いごとに約1.8万円ずつ下がる傾向にあると予測されることになります。</p>
 <p>この他にも、最寄駅までの所用時間（最寄駅.距離.分.）など、単位面積あたり取引価格に影響しそうな変数はありますので、皆さんの方で回帰式に加えるとどうなるか試してみてください。</p>
 </div>
 <div id="作図" class="section level2">
 <h2>作図</h2>
-<p>データ分析では、上のような定量的分析がもちろん大事ですが、その結論をグラフなどで視覚的に訴えることもまた重要です。 RおよびRStudioでは以下に紹介するような関数を用いて簡単に作図することができます。作成した図は画像ファイルで保存して、レポートやプレゼン資料に貼り付けることができます。</p>
+<p>データ分析では、上のような定量的分析がもちろん大事ですが、その結論をグラフなどで視覚的に訴えることもまた重要です。
+RおよびRStudioでは以下に紹介するような関数を用いて簡単に作図することができます。作成した図は画像ファイルで保存して、レポートやプレゼン資料に貼り付けることができます。</p>
 <div id="plotsタブと図の保存" class="section level3">
 <h3>plotsタブと図の保存</h3>
 <p>RStudioでは、作図の関数を使って描かれる図は、ほとんどの場合、下図の右下にあるplotsタブに表示されます。下図は、データフレームmansionについて横軸を築年数、縦軸を単位面積あたり取引価格(取引価格.総額./面積…)とした散布図をplot関数でまず描き、そこに上で推定された回帰式の直線（回帰直線）をabline関数で追加したものです。</p>
 <p><img src="images/plots.png" style="width:80.0%" /></p>
 <p>新たに作図する度にplotsタブに表示される図は置き換わりますが、plotsタブ左上の左右の矢印をクリックすることで、これまでに作図した図を行ったり来たりすることができます。保存したい図を表示したところで、plotsタブのZoomボタンまたはExportボタンをクリックして以下の操作をすることで、画像ファイルとして保存することができます。</p>
 <ul>
-<li>Zoomボタンをクリックすると、下図のように図が別ウィンドウで表示されます。ウィンドウサイズを調整することで図の大きさを調節し、図を右クリックしてSave image as…をクリックしてください。すると下図のようにファイル保存するウィンドウが現れますので、ファイル名を適当に変更（特に末尾（拡張子）を.pngとすることでpngファイルであることを明示した方がよいです）して保存してください。</li>
+<li>Zoomボタンをクリックすると、下図のように図が別ウィンドウで表示されます。ウィンドウサイズを調整することで図の大きさを調節し、図を右クリックしてSave
+image
+as…をクリックしてください。すると下図のようにファイル保存するウィンドウが現れますので、ファイル名を適当に変更（特に末尾（拡張子）を.pngとすることでpngファイルであることを明示した方がよいです）して保存してください。</li>
 </ul>
 <p><img src="images/zoom.png" style="width:60.0%" /></p>
 <ul>
-<li>Exportボタンをクリックすると、下図のようなウィンドウが現れますので、Image format(画像ファイルの種類)、File name(ファイル名)、WidthとHeight(画像の幅と高さのピクセル数)を選択した後、右下のSaveをクリックして保存してください。</li>
+<li>Exportボタンをクリックすると、下図のようなウィンドウが現れますので、Image
+format(画像ファイルの種類)、File
+name(ファイル名)、WidthとHeight(画像の幅と高さのピクセル数)を選択した後、右下のSaveをクリックして保存してください。</li>
 </ul>
 <p><img src="images/export.png" style="width:80.0%" /></p>
 </div>
 <div id="plot関数" class="section level3">
 <h3>plot関数</h3>
-<p>まずは最も基本かつ最もよく使われるplot関数の主な使い方を以下に記します。 plot関数に利用できる引数は把握しきれないほど多く存在します。良く使われる主な引数だけ載せたplot関数の使い方を下記に示します。ただし、下記の最初の引数以外は、引数を省略しても適当なデフォルト値（たとえばxlimは横軸の数値ベクトルの最小値・最大値）が設定されます。</p>
-<div class="line-block">plot(横軸の数値ベクトル, 縦軸の数値ベクトル, main = 図のタイトル, xlab = 横軸名, ylab = 縦軸名,<br />
-   xlim = c(横軸の作図範囲の下限,上限), ylim = c(縦軸の作図範囲の下限,上限),<br />
-   type = “p”, col = 1, pch = 1, cex = 1, lty = 1, lwd = 1)<br />
+<p>まずは最も基本かつ最もよく使われるplot関数の主な使い方を以下に記します。
+plot関数に利用できる引数は把握しきれないほど多く存在します。良く使われる主な引数だけ載せたplot関数の使い方を下記に示します。ただし、下記の最初の引数以外は、引数を省略しても適当なデフォルト値（たとえばxlimは横軸の数値ベクトルの最小値・最大値）が設定されます。</p>
+<div class="line-block">plot(横軸の数値ベクトル, 縦軸の数値ベクトル,
+main = 図のタイトル, xlab = 横軸名, ylab = 縦軸名,<br />
+   xlim = c(横軸の作図範囲の下限,上限), ylim =
+c(縦軸の作図範囲の下限,上限),<br />
+   type = "p", col = 1, pch = 1, cex = 1, lty = 1, lwd = 1)<br />
 </div>
 <p>以下に、上記の最後の行にある各引数の設定を説明します。</p>
 <ul>
-<li><p>type：グラフの種類（デフォルトは“p”の散布図）</p>
+<li><p>type：グラフの種類（デフォルトは”p”の散布図）</p>
 <ul>
-<li><p>type = “p”：散布図</p></li>
-<li><p>type = “l”：折れ線グラフ</p></li>
-<li><p>type = “o”：点付き折れ線グラフ（“p”と“l”を両方描く）</p></li>
+<li><p>type = "p"：散布図</p></li>
+<li><p>type = "l"：折れ線グラフ</p></li>
+<li><p>type = "o"：点付き折れ線グラフ（“p”と”l”を両方描く）</p></li>
 </ul></li>
 <li><p>col：点・線の色（デフォルトは1の黒）</p>
 <ul>
-<li><p>col = 1,2,3,4,5,6,7,8：黒,赤,緑,青,水色,紫,黄,灰色（暗い色彩）</p></li>
-<li><p>col = “red”,“green”,“blue”,“orange”,…：赤,緑,青,橙など（明るい色彩）</p></li>
+<li><p>col =
+1,2,3,4,5,6,7,8：黒,赤,緑,青,水色,紫,黄,灰色（暗い色彩）</p></li>
+<li><p>col =
+"red","green","blue","orange",…：赤,緑,青,橙など（明るい色彩）</p></li>
 <li><p>col = 0：無色透明（図に点を描きたくないときに用いる）</p></li>
 </ul></li>
 <li><p>pch：点の種類（デフォルトは1の〇）</p>
@@ -428,7 +449,8 @@ div.tocify {
 </ul></li>
 <li><p>lwd：線の太さ（デフォルトは1）</p></li>
 </ul>
-<p>以下に、点の色(col)・種類(pch)・大きさ(cex)を点ごとに変えた点付き折れ線グラフ(type = “o”)を例として示します。</p>
+<p>以下に、点の色(col)・種類(pch)・大きさ(cex)を点ごとに変えた点付き折れ線グラフ(type
+= “o”)を例として示します。</p>
 <pre class="r"><code>x = 1:8   # 横軸の値（色と点種）
 y = 1:8/2 # 縦軸の値（点の大きさ）
 plot(x, y, type=&quot;o&quot;, col = 1:8, pch = 1:8, cex = 1:8/2, main = &quot;点の表示例&quot;, xlab = &quot;色と点種&quot;, ylab = &quot;点の大きさ&quot;)</code></pre>
@@ -436,14 +458,19 @@ plot(x, y, type=&quot;o&quot;, col = 1:8, pch = 1:8, cex = 1:8/2, main = &quot;�
 </div>
 <div id="点線の追加" class="section level3">
 <h3>点・線の追加</h3>
-<p>plot関数で描いた図には、以下の関数を用いて後からさらに点や線を加えることができます。 点の追加はpoints関数、折れ線の追加はlines関数が以下のように使えます。plot関数との違いは、既存の図に点や線を加えるだけのため、図のタイトル、各軸名、各軸の作図範囲の下限上限を指定できないところです。</p>
-<p>points(横軸の数値ベクトル, 縦軸の数値ベクトル, type = “p”, col = 1, pch = 1, cex = 1, lty = 1, lwd = 1)</p>
-<p>lines(横軸の数値ベクトル, 縦軸の数値ベクトル, type = “l”, col = 1, pch = 1, cex = 1, lty = 1, lwd = 1)</p>
+<p>plot関数で描いた図には、以下の関数を用いて後からさらに点や線を加えることができます。
+点の追加はpoints関数、折れ線の追加はlines関数が以下のように使えます。plot関数との違いは、既存の図に点や線を加えるだけのため、図のタイトル、各軸名、各軸の作図範囲の下限上限を指定できないところです。</p>
+<p>points(横軸の数値ベクトル, 縦軸の数値ベクトル, type = "p", col = 1,
+pch = 1, cex = 1, lty = 1, lwd = 1)</p>
+<p>lines(横軸の数値ベクトル, 縦軸の数値ベクトル, type = "l", col = 1,
+pch = 1, cex = 1, lty = 1, lwd = 1)</p>
 <p>また、abline関数を用いると、無限遠まで伸びる直線を引くことができます。abline関数の使い方は数パターンあり、以下に主に使われる4パターンを列挙します。</p>
 <p>水平線の追加：abline(h = 線の縦軸位置, col = 1, lty = 1, lwd = 1)</p>
 <p>垂直線の追加：abline(v = 線の横軸位置, col = 1, lty = 1, lwd = 1)</p>
-<p>斜め線の追加：abline(a = 切片, b = 傾き, col = 1, lty = 1, lwd = 1)</p>
-<p>回帰直線の追加：abline(lm(縦軸の変数名 ~ 横軸の変数名, データフレーム), col = 1, lty = 1, lwd = 1)</p>
+<p>斜め線の追加：abline(a = 切片, b = 傾き, col = 1, lty = 1, lwd =
+1)</p>
+<p>回帰直線の追加：abline(lm(縦軸の変数名 ~ 横軸の変数名,
+データフレーム), col = 1, lty = 1, lwd = 1)</p>
 <p>上の4パターンのうち最初の3つを使った例を以下に示します。最後の回帰直線の追加は、上の「plotsタブと図の保存」にて例を示していますのでそちらをご参照ください。</p>
 <pre class="r"><code>plot(0,0,col=0,xlim=c(1,5),ylim=c(1,5),main=&quot;abline関数の使用例&quot;,xlab=&quot;線の種類&quot;,ylab=&quot;線の太さ&quot;) # 点無し（col=0で無色透明）で指定した範囲の枠を作成
 abline(h = 1:5, lwd = 1:5) # 太さの異なる水平線を5本追加
@@ -454,27 +481,33 @@ abline(a = 0, b = 1) # 対角線を追加</code></pre>
 <div id="par関数による図の調整" class="section level3">
 <h3>par関数による図の調整</h3>
 <p>上では、図の中に日本語を表示していますが、Macで同じように実行すると日本語が正しく表示できない（□で表示される）問題が発生します。その場合、plot関数を使う前に下記の命令文を実行して、あらかじめ図中の文字フォント(family)を指定することで、図に日本語を表示できるようになります。</p>
-<p>par(family = “HiraKakuProN-W3”)</p>
+<p>par(family = "HiraKakuProN-W3")</p>
 <p>このpar関数は、図中の文字フォント以外にも様々な図の調整を行うことができます。たとえば図中の文字サイズを指定するには、次のように引数psに適当な数値を指定します。</p>
 <p>par(ps = 20)</p>
 <p>また、私はplot関数で作図をする前によく次の命令文を実行して図の余白等をあらかじめ調整しています。</p>
 <p>par(mar = c(3,3,1,1), mgp = c(1.5,0.5,0))</p>
-<p>上記で、引数marはplot関数で描かれる枠の下、左、上、右に確保する余白の大きさを数値ベクトルで順に指定しています。 また、引数mgpは各軸から軸名、目盛り数値、目盛り線をどれだけ離すかを数値ベクトルで順に指定しています。 上記の設定により、plotsタブの余白を小さくして図をより大きく見せることができます。</p>
+<p>上記で、引数marはplot関数で描かれる枠の下、左、上、右に確保する余白の大きさを数値ベクトルで順に指定しています。
+また、引数mgpは各軸から軸名、目盛り数値、目盛り線をどれだけ離すかを数値ベクトルで順に指定しています。
+上記の設定により、plotsタブの余白を小さくして図をより大きく見せることができます。</p>
 </div>
 <div id="pairs.panels関数" class="section level3">
 <h3>pairs.panels関数</h3>
 <p>最後に、回帰分析を行う前にデータの変数間の関係を観察するのに便利なpairs.panels関数を紹介しておきます。pairs.panels関数はpsychパッケージの関数であるため、まずpsychパッケージを「関数とパッケージ」にて述べた方法によりインストールしてください。</p>
-<p>インストールしたpsychパッケージをlibrary(psych)で読み込み、データフレームmansionに単位面積あたり取引価格（取引価格.総額./面積…）を列追加した上で、“単位面積あたり取引価格”,“最寄駅.距離.分.”,“築年数”の3つの変数の相関関係を下記のpairs.panels関数で作図して確認します。</p>
+<p>インストールしたpsychパッケージをlibrary(psych)で読み込み、データフレームmansionに単位面積あたり取引価格（取引価格.総額./面積…）を列追加した上で、単位面積あたり取引価格,
+最寄駅.距離.分.,
+築年数の3つの変数の相関関係を下記のpairs.panels関数で作図して確認します。</p>
 <p>pairs.panels(データフレーム(一部列を抽出), lm = T)</p>
-<p>すると、下図のようにplotsタブに3×3のパネルが並び、対角線上には各変数のヒストグラム（ ＆密度推定）、対角線下には各変数ペアの散布図（＆縦軸を目的変数、横軸を説明変数とする回帰直線）、対角線上には各変数ペアの相関係数が、一挙に表示されます。なお、最後の引数 lm = T は散布図に回帰直線を加えるために追加したものです。</p>
+<p>すると、下図のようにplotsタブに3×3のパネルが並び、対角線上には各変数のヒストグラム（
+＆密度推定）、対角線下には各変数ペアの散布図（＆縦軸を目的変数、横軸を説明変数とする回帰直線）、対角線上には各変数ペアの相関係数が、一挙に表示されます。なお、最後の引数
+lm = T は散布図に回帰直線を加えるために追加したものです。</p>
 <p><img src="images/pairs.png" style="width:100.0%" /></p>
 <p>まず上の図から変数間の相関関係を以下のように観察します。</p>
 <ul>
-<li><p>最寄駅.距離.分.と築年数はほぼ無相関に近い（相関係数-0.11）。</p></li>
-<li><p>最寄駅.距離.分.は単位面積あたり取引価格と弱い負の相関（相関係数-0.24）がある。</p></li>
-<li><p>築年数は単位面積あたり取引価格と強い負の相関（相関係数-0.60）がある。</p></li>
+<li><p>最寄駅.距離.分.と築年数はほぼ無相関に近い（相関係数0.17）。</p></li>
+<li><p>最寄駅.距離.分.は単位面積あたり取引価格もほぼ無相関（相関係数0.03）である。</p></li>
+<li><p>築年数は単位面積あたり取引価格とやや強い負の相関（相関係数-0.62）がある。</p></li>
 </ul>
-<p>その結果、単位面積あたり取引価格を目的変数とした回帰式を立てるのに、築年数が有力な説明変数候補となり、最寄駅.距離.分.もやや弱い説明変数候補となることが分かります。</p>
+<p>その結果、単位面積あたり取引価格を目的変数とした回帰式を立てるのに、築年数は有力な説明変数候補となりますが、最寄駅.距離.分.は説明変数候補となり難いことが分かります。</p>
 <p>このような<strong>探索的データ分析</strong>は、回帰式の候補を先入観で決めずにデータから客観的に考察するための重要なプロセスとなります。皆さんも、興味のあるデータを持ち寄って探索的データ分析から回帰分析までのデータ分析をぜひ試してみてください。</p>
 </div>
 </div>

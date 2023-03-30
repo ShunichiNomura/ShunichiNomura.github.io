@@ -13,7 +13,7 @@
 
 <title>インストール</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="site_style.css" type="text/css" />
 
 
@@ -84,6 +85,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -141,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -174,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -183,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -309,7 +310,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -325,7 +326,7 @@ div.tocify {
   <a href="install.html">インストール</a>
 </li>
 <li>
-  <a href="cloud.html">RStudio Cloud</a>
+  <a href="cloud.html">Posit Cloud</a>
 </li>
 <li>
   <a href="basics.html">基本操作</a>
@@ -341,6 +342,12 @@ div.tocify {
 </li>
 <li>
   <a href="analysis.html">回帰分析と作図</a>
+</li>
+<li>
+  <a href="ggplot2.html">ggplot2による作図</a>
+</li>
+<li>
+  <a href="dplyr.html">dplyrによるデータ操作</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -362,21 +369,34 @@ div.tocify {
 <p>こちらでは、RとRStudioを自身のパソコンにインストールする方法を概説します。</p>
 <div id="rのインストール" class="section level2">
 <h2>Rのインストール</h2>
-<p>【重要】Rを過去にインストール済である方も、インストールされているRのバージョンが古い(R 3.?.? 等)場合には各種コードで動作が異なったりエラーが出ることがありますので、以下の方法にて最新バージョンをインストールしてください。</p>
+<p>【重要】Rを過去にインストール済である方も、インストールされているRのバージョンが古い(R
+3.?.?
+等)場合には各種コードで動作が異なったりエラーが出ることがありますので、以下の方法にて最新バージョンをインストールしてください。</p>
 <p>Rのインストール方法はインストールするパソコンのOS(Windows/Mac)に依存します。</p>
 <div id="windowsの場合" class="section level3">
 <h3>Windowsの場合</h3>
-<p>Step.1： <a href="https://cran.ism.ac.jp/bin/windows/base/">install R for the first time</a>から“Download R 4.1.3 for Windows”をクリックして“R-4.1.3.exe”をダウンロードする。</p>
-<p>Step.2： ダウンロードした“R-4.1.3.exe”を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。</p>
-<p>Step.3： 「セットアップに使用する言語の選択」と上に書かれたウィンドウが現れるので、日本語が選択されていることを確認して下の「OK」をクリックする。</p>
-<p>Step.4： 「R for Windows 4.1.3 セットアップ」と上に書かれたウィンドウが現れるので、下の「次へ」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。</p>
-<p>【上手くいかないとき】MicrosoftのクラウドサービスであるOneDriveに“R-4.1.3.exe”をダウンロードして実行するとインストールできないことがあります。その場合は、“R-4.1.3.exe”をOneDriveからコンピュータ内のローカルフォルダへと移してからStep.2以降を再度試してください。</p>
+<p>Step.1： <a href="https://cran.ism.ac.jp/bin/windows/base/">install R
+for the first time</a>から”Download R-4.2.3 for
+Windows”をクリックして”R-4.2.3.exe”をダウンロードする。</p>
+<p>Step.2：
+ダウンロードした”R-4.2.3.exe”を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。</p>
+<p>Step.3：
+「セットアップに使用する言語の選択」と上に書かれたウィンドウが現れるので、日本語が選択されていることを確認して下の「OK」をクリックする。</p>
+<p>Step.4： 「R for Windows 4.2.3
+セットアップ」と上に書かれたウィンドウが現れるので、下の「次へ」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。</p>
+<p>【上手くいかないとき】MicrosoftのクラウドサービスであるOneDriveに”R-4.2.3.exe”をダウンロードして実行するとインストールできないことがあります。その場合は、“R-4.2.3.exe”をOneDriveからコンピュータ内のローカルフォルダへと移してからStep.2以降を再度試してください。</p>
 </div>
 <div id="macの場合" class="section level3">
 <h3>Macの場合</h3>
-<p>Step.1： <a href="https://support.apple.com/ja-jp/HT211814/">Apple シリコン搭載の Mac コンピュータ</a>を参考に、インストールするMacコンピュータがIntelプロセッサ搭載かAppleシリコン搭載かを確認する。</p>
-<p>Step.2： <a href="https://cran.ism.ac.jp/bin/macosx/">R for macOS</a>から、Intelプロセッサ搭載の場合は" R-4.1.3.pkg“を、Appleシリコン搭載の場合は”R-4.1.3-arm64.pkg"をクリックして当該ファイルをダウンロードする。</p>
-<p>Step.3： ダウンロードしたpkgファイルを「アプリケーションで開く：Installer」で開くと「Install R 4.1.3 for macOS」と上に書かれたウィンドウが現れるので、下に現れる「Continue(続ける)」「Agree(同意する)」「Install(インストール)」を何度かクリックしていき、最後に下に現れる「Close(閉じる)」をクリックするとインストールが完了する。</p>
+<p>Step.1： <a href="https://support.apple.com/ja-jp/HT211814/">Apple
+シリコン搭載の Mac
+コンピュータ</a>を参考に、インストールするMacコンピュータがAppleシリコン搭載かIntelプロセッサ搭載かを確認する。</p>
+<p>Step.2： <a href="https://cran.ism.ac.jp/bin/macosx/">R for
+macOS</a>から、Appleシリコン搭載の場合は”R-4.2.3-arm64.pkg”を、Intelプロセッサ搭載の場合は”R-4.2.3.pkg”をクリックして当該ファイルをダウンロードする。</p>
+<p>Step.3：
+ダウンロードしたpkgファイルを「アプリケーションで開く：Installer」で開くと「Install
+R 4.2.3 for
+macOS」と上に書かれたウィンドウが現れるので、下に現れる「Continue(続ける)」「Agree(同意する)」「Install(インストール)」を何度かクリックしていき、最後に下に現れる「Close(閉じる)」をクリックするとインストールが完了する。</p>
 </div>
 </div>
 <div id="rstudioのインストール" class="section level2">
@@ -384,14 +404,23 @@ div.tocify {
 <p>RStudioのインストール方法もインストールするパソコンのOS(Windows/Mac)に依存します。</p>
 <div id="windowsの場合-1" class="section level3">
 <h3>Windowsの場合</h3>
-<p>Step.1： <a href="https://www.rstudio.com/products/rstudio/download/#download">Download the RStudio IDE</a>から“DOWNLOAD RSTUDIO FOR WINDOWS”をクリックして“RStudio-2022.02.1-461.exe”をダウンロードする。</p>
-<p>Step.2： ダウンロードした“RStudio-2022.02.1-461.exe”を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。</p>
-<p>Step.3： 「RStudio セットアップ」と上に書かれたウィンドウが現れるので、下に現れる「次へ」「インストール」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。</p>
+<p>Step.1： <a
+href="https://www.rstudio.com/products/rstudio/download/#download">Download
+the RStudio Desktop</a>から”DOWNLOAD RSTUDIO DESKTOP FOR
+WINDOWS”をクリックして”RStudio-2023.03.0-386.exe”をダウンロードする。</p>
+<p>Step.2：
+ダウンロードした”RStudio-2023.03.0-386.exe”を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。</p>
+<p>Step.3： 「RStudio
+セットアップ」と上に書かれたウィンドウが現れるので、下に現れる「次へ」「インストール」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。</p>
 </div>
 <div id="macの場合-1" class="section level3">
 <h3>Macの場合</h3>
-<p>Step.1： <a href="https://www.rstudio.com/products/rstudio/download/#download">Download the RStudio IDE</a>から“RStudio-2022.02.1-461.dmg”をクリックして当該ファイルをダウンロードする。</p>
-<p>Step.2： ダウンロードしたpkgファイルを「アプリケーションで開く：DiskImageMounter」で開くと、“RStudio.app”アイコンと“Applications”へのショートカットアイコンの入ったフォルダ(Finder)が開くので、“RStudio.app”アイコンを“Applications”へのショートカットアイコンへとドラッグする。</p>
+<p>Step.1： <a
+href="https://www.rstudio.com/products/rstudio/download/#download">Download
+the RStudio
+Desktop</a>から”RStudio-2023.03.0-386.dmg”をクリックして当該ファイルをダウンロードする。</p>
+<p>Step.2：
+ダウンロードしたpkgファイルを「アプリケーションで開く：DiskImageMounter」で開くと、“RStudio.app”アイコンと”Applications”へのショートカットアイコンの入ったフォルダ(Finder)が開くので、“RStudio.app”アイコンを”Applications”へのショートカットアイコンへとドラッグする。</p>
 </div>
 </div>
 <div id="rstudioの起動" class="section level2">

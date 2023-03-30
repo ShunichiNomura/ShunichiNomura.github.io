@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>dplyrによるデータ操作</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RStudio入門</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">はじめに</a>
+</li>
+<li>
+  <a href="install.html">インストール</a>
+</li>
+<li>
+  <a href="cloud.html">Posit Cloud</a>
+</li>
+<li>
+  <a href="basics.html">基本操作</a>
+</li>
+<li>
+  <a href="object.html">オブジェクト</a>
+</li>
+<li>
+  <a href="function.html">関数</a>
+</li>
+<li>
+  <a href="files.html">ファイル入出力</a>
+</li>
+<li>
+  <a href="analysis.html">回帰分析と作図</a>
+</li>
+<li>
+  <a href="ggplot2.html">ggplot2による作図</a>
+</li>
+<li>
+  <a href="dplyr.html">dplyrによるデータ操作</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">dplyrによるデータ操作</h1>
+
+</div>
+
+
+<div id="dplyrとは" class="section level2">
+<h2>dplyrとは</h2>
+<p>データを分析するにあたり、絞り込み、列の追加・削除、集計などデータフレームの操作が必要になることが多いです。このようなデータ操作にはdplyrパッケージを利用すると便利です。</p>
+<p>dplyrを利用するにはまずdplyrパッケージのインストールと読み込みを行ってください。</p>
+<pre class="r"><code>install.packages(&quot;dplyr&quot;)
+library(dplyr)</code></pre>
+</div>
+<div id="パイプ演算子" class="section level2">
+<h2>パイプ演算子’%&gt;%’</h2>
+<p>dplyrパッケージを使いこなすには、パイプ演算子%&gt;%が不可欠です。
+パイプ演算子%&gt;%は、演算子の左にあるオブジェクトを、演算子の右にある関数の第1引数へと挿入します。
+たとえば次のコードは、iris（アヤメのデータ）の先頭5行を表示するのにパイプ演算子%&gt;%を利用しています。</p>
+<pre class="r"><code># irisデータの先頭5行を表示
+iris %&gt;% head(5) # head(iris,5)と同じ</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa</code></pre>
+<p>上の例ではパイプ演算子%&gt;%の良さが分かりづらいですが、これから紹介するdplyrパッケージの関数はいずれもデータフレームを第1引数に取った上で加工後のデータフレームを返す関数となっているため、以下の形式で連鎖的にデータフレームを操作することができます。</p>
+<div class="line-block">データフレーム %&gt;%<br />
+    dplyrパッケージの関数(他の引数) %&gt;%<br />
+    dplyrパッケージの関数(他の引数) %&gt;%<br />
+    ・・・</div>
+<p>なお、加工した最終結果をオブジェクトに保存したい場合は、1行目を「オブジェクト名
+= データフレーム %&gt;%」としてください。</p>
+<p>これから紹介する関数の使用例を通じてパイプ演算子%&gt;%の威力を感じていただけたらと思います。</p>
+</div>
+<div id="ソートarrange関数" class="section level2">
+<h2>ソート（arrange関数）</h2>
+<p>まずは、データフレームの行をある列（変数）の昇順あるいは降順に並べ替えたいときには、arrange関数を用います。</p>
+<p>昇順のソート：データフレーム %&gt;% arrange(列名)</p>
+<p>降順のソート：データフレーム %&gt;% arrange(desc(列名))</p>
+<p>複数列でのソート：データフレーム %&gt;% arrange(列名1, 列名2,…)</p>
+<p>例として、irisデータをSepal.Length(がく片の長さ)でソートしてからその先頭5行を表示します。</p>
+<pre class="r"><code># 昇順ソートして先頭5行を表示
+iris %&gt;% arrange(Sepal.Length) %&gt;% head(5) # head(arrange(iris,Sepal.Length),5)と同じ</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          4.3         3.0          1.1         0.1  setosa
+## 2          4.4         2.9          1.4         0.2  setosa
+## 3          4.4         3.0          1.3         0.2  setosa
+## 4          4.4         3.2          1.3         0.2  setosa
+## 5          4.5         2.3          1.3         0.3  setosa</code></pre>
+<pre class="r"><code># 降順ソートして先頭5行を表示
+iris %&gt;% arrange(desc(Sepal.Length)) %&gt;% head(5)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+## 1          7.9         3.8          6.4         2.0 virginica
+## 2          7.7         3.8          6.7         2.2 virginica
+## 3          7.7         2.6          6.9         2.3 virginica
+## 4          7.7         2.8          6.7         2.0 virginica
+## 5          7.7         3.0          6.1         2.3 virginica</code></pre>
+<pre class="r"><code># アヤメの種類名の昇順、がく片の長さの降順でソートして先頭5行を表示
+iris %&gt;% arrange(Species, desc(Sepal.Length)) %&gt;% head(5)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.8         4.0          1.2         0.2  setosa
+## 2          5.7         4.4          1.5         0.4  setosa
+## 3          5.7         3.8          1.7         0.3  setosa
+## 4          5.5         4.2          1.4         0.2  setosa
+## 5          5.5         3.5          1.3         0.2  setosa</code></pre>
+<p>上の例ではパイプ演算子%&gt;%を複数回使っており、パイプ演算子%&gt;%を使わないと関数と引数が入り混じって見づらいように感じます。</p>
+</div>
+<div id="列の絞り込みselect関数" class="section level2">
+<h2>列の絞り込み（select関数）</h2>
+<p>データフレームから指定した列のみ抽出したいとき、次のselect関数を用います。</p>
+<p>データフレーム %&gt;% select(抽出する列名1, 抽出する列名2,…)</p>
+<pre class="r"><code># アヤメの花びらの長さと幅のみ抽出して列平均(colMeans)を表示
+iris %&gt;% select(Petal.Length, Petal.Width) %&gt;% colMeans</code></pre>
+<pre><code>## Petal.Length  Petal.Width 
+##     3.758000     1.199333</code></pre>
+<p>逆に、指定した列のみ除外したい場合は、列名にマイナス符号を付けます。</p>
+<p>データフレーム %&gt;% select(-抽出しない列名1,
+-抽出しない列名2,…)</p>
+<pre class="r"><code># アヤメの種類を除外して列平均(colMeans)を表示
+iris %&gt;% select(-Species) %&gt;% colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##     5.843333     3.057333     3.758000     1.199333</code></pre>
+<p>最後に、抽出した列名の名前を変えることもできます。</p>
+<p>データフレーム %&gt;% select(新たな列名1 = 抽出する列名1, 新たな列名2
+= 抽出する列名2,…)</p>
+<pre class="r"><code># アヤメの花びらの長さと幅のみ抽出し、列名変更して列平均(colMeans)を表示
+iris %&gt;% select(Length = Petal.Length, Width = Petal.Width) %&gt;% colMeans</code></pre>
+<pre><code>##   Length    Width 
+## 3.758000 1.199333</code></pre>
+</div>
+<div id="行の絞り込みfilter関数" class="section level2">
+<h2>行の絞り込み（filter関数）</h2>
+<p>データフレームから条件に合う行のみ抽出したいとき、次のfilter関数を用います。</p>
+<p>データフレーム %&gt;% filter(条件式)</p>
+<p>これはデータフレーム[条件式,]と書くことでも同じことができますが、filter関数を用いることで次の例のように他の関数とパイプ演算子%&gt;%で連鎖させることができます。</p>
+<pre class="r"><code># アヤメの種類&quot;setosa&quot;の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %&gt;% 
+  filter(Species == &quot;setosa&quot;) %&gt;% 
+  select(-Species) %&gt;% 
+  colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##        5.006        3.428        1.462        0.246</code></pre>
+<p>複数の条件を全て満たす行を抽出したいときは、条件式をアンド’&amp;‘もしくはカンマ’,’で繋ぎます。</p>
+<p>データフレーム %&gt;% filter(条件式1 &amp; 条件式2,…)</p>
+<pre class="r"><code># アヤメの種類&quot;setosa&quot;かつがく片の長さ5未満の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %&gt;% 
+  filter(Species == &quot;setosa&quot; &amp; Sepal.Length &lt; 5) %&gt;% 
+  select(-Species) %&gt;% 
+  colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##        4.670        3.140        1.415        0.195</code></pre>
+<p>最後に、複数の条件のいずれかを満たす行を抽出したいときは、条件式を縦棒’|’で繋ぎます。</p>
+<p>データフレーム %&gt;% filter(条件式1 | 条件式2,…)</p>
+<pre class="r"><code># アヤメの種類&quot;setosa&quot;または&quot;verginica&quot;の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %&gt;% 
+  filter(Species == &quot;setosa&quot; | Species == &quot;virginica&quot;) %&gt;%
+  select(-Species) %&gt;% 
+  colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##        5.797        3.201        3.507        1.136</code></pre>
+<pre class="r"><code># 上記のコード
+iris %&gt;% 
+  filter(Species %in% c(&quot;setosa&quot;,&quot;virginica&quot;)) %&gt;%
+  select(-Species) %&gt;% 
+  colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##        5.797        3.201        3.507        1.136</code></pre>
+<p>なお、上の例は演算子%in%（左辺が右辺の要素のいずれかと等しい）を用いて次のように書くこともできます。</p>
+<pre class="r"><code># アヤメの種類&quot;setosa&quot;または&quot;verginica&quot;の行のみ抽出し、アヤメの種類を除外して列平均(colMeans)を表示
+iris %&gt;% 
+  filter(Species %in% c(&quot;setosa&quot;,&quot;virginica&quot;)) %&gt;%
+  select(-Species) %&gt;% 
+  colMeans</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##        5.797        3.201        3.507        1.136</code></pre>
+</div>
+<div id="列の追加mutate関数" class="section level2">
+<h2>列の追加（mutate関数）</h2>
+<p>データフレームに新たな列を追加したいときは、次のmutate関数を用います。</p>
+<p>データフレーム %&gt;% mutate(追加する列名1 = データ1, 追加する列名2 =
+データ2,…)</p>
+<p>次の例では、がく片の長さと幅の比率 Sepal.LWR、花びらの長さと幅の比率
+Petal.LWR
+を列追加したデータフレームを、パイプ演算子%&gt;%でggplot関数へと入れて散布図を描いています。</p>
+<pre class="r"><code># アヤメのがく片および花びらの長さと幅の比率を列追加し、その散布図を表示
+iris %&gt;% 
+  mutate(Sepal.LWR = Sepal.Length/Sepal.Width, Petal.LWR = Petal.Length/Petal.Width) %&gt;% 
+  ggplot(aes(x=Sepal.LWR, y=Petal.LWR, col=Species, shape=Species)) + geom_point()</code></pre>
+<p><img src="dplyr_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="集計summarise関数" class="section level2">
+<h2>集計（summarise関数）</h2>
+<p>上のいくつかの例ではcolMeans関数を用いて列平均を集計していましたが、次のsummarise関数を用いて特定の列を特定の方法で集計することもできます。</p>
+<p>データフレーム %&gt;% summarise(新たな列名1 = 関数(列名1),
+新たな列名2 = 関数(列名2),…)</p>
+<p>上の関数には、length(データ数), mean(平均), sum(合計), min(最小値),
+max(最大値),
+median(中央値)など通常のベクトルを集計する関数はほぼ使えます。</p>
+<p>summarise関数からは次の例のように、新たな列名ごとに集計値が入ったデータフレームが返されます。</p>
+<pre class="r"><code># アヤメの花びらの幅のデータ数、平均、中央値を集計
+iris %&gt;% 
+  summarise(n = length(Petal.Width), mean = mean(Petal.Width), med = median(Petal.Width))</code></pre>
+<pre><code>##     n     mean med
+## 1 150 1.199333 1.3</code></pre>
+</div>
+<div id="集計時のグループ化group_by関数" class="section level2">
+<h2>集計時のグループ化（group_by関数）</h2>
+<p>上に紹介したsummarise関数は、集計する区分を設ける次のgroup_by関数と併用することで大幅に利便性が増します。</p>
+<div class="line-block">データフレーム %&gt;%<br />
+  group_by(集計を区分する列名1, 集計を区分する列名2,…) %&gt;%<br />
+  summarise(新たな列名1 = 関数(列名1), 新たな列名2 =
+関数(列名2),…)</div>
+<p>たとえば1つ前の例に、次のように group_by(Species)
+を挿入することで、アヤメの種類ごとに集計されるようになります。集計区分に使われた列Speciesが最初に表示され、Speciesのカテゴリごとに集計されていることが分かります。</p>
+<pre class="r"><code># アヤメの花びらの幅のデータ数、平均、中央値を、アヤメの種類ごとに集計
+iris %&gt;% 
+  group_by(Species) %&gt;%
+  summarise(n = length(Petal.Width), mean = mean(Petal.Width), med = median(Petal.Width))</code></pre>
+<pre><code>## # A tibble: 3 × 4
+##   Species        n  mean   med
+##   &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 setosa        50 0.246   0.2
+## 2 versicolor    50 1.33    1.3
+## 3 virginica     50 2.03    2</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

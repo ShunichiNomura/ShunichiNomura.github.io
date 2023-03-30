@@ -1,5 +1,5 @@
 ---
-title: "RStudio Cloud"
+title: "Posit Cloud"
 output:
   html_document:
     toc: true
@@ -14,13 +14,13 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-こちらでは、自身のパソコンでRとRStudioをインストールして利用する代わりに、インストール無しでWebブラウザ上でRStudioを利用する方法（RStudio Cloud）を紹介します。
+こちらでは、自身のパソコンでRとRStudioをインストールして利用する代わりに、インストール無しでWebブラウザ上でRStudioを利用する方法（Posit Cloud）を紹介します。
 
-## RStudio Cloudとは
+## Posit Cloud (旧RStudio Cloud)とは
 
 Webブラウザ上でRStudioを扱うことのできるクラウドサービスです。Webブラウザ上でアクセスするサーバー上でRStudioを動かすため、OS(Windows/mac)などのコンピュータ環境の違いによるトラブルや動作の違いは起こらず、使用するコンピュータを変えても同一の結果を得ることができます。
 
-RStudio Cloudには無料アカウント（Free plan）と有料アカウント（数種類のplan）があり、無料アカウントの場合には利用にあたり以下の制限があることに注意してください。
+Posit Cloudには無料アカウント（Free plan）と有料アカウント（数種類のplan）があり、無料アカウントの場合には利用にあたり以下の制限があることに注意してください。
 
 - 月の利用時間上限が25時間（一部の有料アカウントでは無制限）
 
@@ -30,11 +30,11 @@ RStudio Cloudには無料アカウント（Free plan）と有料アカウント�
 
 - 利用できるメモリ量は1GB（一部の有料アカウントでは16GB）
 
-もし、月の利用時間上限に引っかかってしまった場合は、別のアカウントを作成して利用するか、有料アカウントを持っている方の共有スペース(Shared Space)からRStudio Cloudを利用することができます。
+もし、月の利用時間上限に引っかかってしまった場合は、別のアカウントを作成して利用するか、有料アカウントを持っている方の共有スペース(Shared Space)からPosit Cloudを利用することができます。
 
 ## 無料アカウントの作成
 
-[下図のSign Upページ](https://login.rstudio.cloud/register?redirect=https%3A%2F%2Fclient.login.rstudio.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D0)から以下のいずれかの方法でアカウントを登録してください。
+[下図のSign Upページ](https://login.posit.cloud/register?redirect=https%3A%2F%2Fclient.login.rstudio.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D0)から以下のいずれかの方法でアカウントを登録してください。
 
 ![](images/signup.png){width=40%}
 

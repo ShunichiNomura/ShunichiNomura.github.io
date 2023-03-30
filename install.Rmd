@@ -24,24 +24,23 @@ Rのインストール方法はインストールするパソコンのOS(Windows
 
 ### Windowsの場合
 
-Step.1： [install R for the first time](https://cran.ism.ac.jp/bin/windows/base/)から"Download R 4.1.3 for Windows"をクリックして"R-4.1.3.exe"をダウンロードする。
+Step.1： [install R for the first time](https://cran.ism.ac.jp/bin/windows/base/)から"Download R-4.2.3 for Windows"をクリックして"R-4.2.3.exe"をダウンロードする。
 
-Step.2： ダウンロードした"R-4.1.3.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
+Step.2： ダウンロードした"R-4.2.3.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
 
 Step.3： 「セットアップに使用する言語の選択」と上に書かれたウィンドウが現れるので、日本語が選択されていることを確認して下の「OK」をクリックする。
 
-Step.4： 「R for Windows 4.1.3 セットアップ」と上に書かれたウィンドウが現れるので、下の「次へ」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。
+Step.4： 「R for Windows 4.2.3 セットアップ」と上に書かれたウィンドウが現れるので、下の「次へ」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。
 
-【上手くいかないとき】MicrosoftのクラウドサービスであるOneDriveに"R-4.1.3.exe"をダウンロードして実行するとインストールできないことがあります。その場合は、"R-4.1.3.exe"をOneDriveからコンピュータ内のローカルフォルダへと移してからStep.2以降を再度試してください。
+【上手くいかないとき】MicrosoftのクラウドサービスであるOneDriveに"R-4.2.3.exe"をダウンロードして実行するとインストールできないことがあります。その場合は、"R-4.2.3.exe"をOneDriveからコンピュータ内のローカルフォルダへと移してからStep.2以降を再度試してください。
 
 ### Macの場合
 
-Step.1： [Apple シリコン搭載の Mac コンピュータ](https://support.apple.com/ja-jp/HT211814/)を参考に、インストールするMacコンピュータがIntelプロセッサ搭載かAppleシリコン搭載かを確認する。
+Step.1： [Apple シリコン搭載の Mac コンピュータ](https://support.apple.com/ja-jp/HT211814/)を参考に、インストールするMacコンピュータがAppleシリコン搭載かIntelプロセッサ搭載かを確認する。
 
-Step.2： [R for macOS](https://cran.ism.ac.jp/bin/macosx/)から、Intelプロセッサ搭載の場合は"
-R-4.1.3.pkg"を、Appleシリコン搭載の場合は"R-4.1.3-arm64.pkg"をクリックして当該ファイルをダウンロードする。
+Step.2： [R for macOS](https://cran.ism.ac.jp/bin/macosx/)から、Appleシリコン搭載の場合は"R-4.2.3-arm64.pkg"を、Intelプロセッサ搭載の場合は"R-4.2.3.pkg"をクリックして当該ファイルをダウンロードする。
 
-Step.3： ダウンロードしたpkgファイルを「アプリケーションで開く：Installer」で開くと「Install R 4.1.3 for macOS」と上に書かれたウィンドウが現れるので、下に現れる「Continue(続ける)」「Agree(同意する)」「Install(インストール)」を何度かクリックしていき、最後に下に現れる「Close(閉じる)」をクリックするとインストールが完了する。
+Step.3： ダウンロードしたpkgファイルを「アプリケーションで開く：Installer」で開くと「Install R 4.2.3 for macOS」と上に書かれたウィンドウが現れるので、下に現れる「Continue(続ける)」「Agree(同意する)」「Install(インストール)」を何度かクリックしていき、最後に下に現れる「Close(閉じる)」をクリックするとインストールが完了する。
 
 ## RStudioのインストール
 
@@ -49,15 +48,15 @@ RStudioのインストール方法もインストールするパソコンのOS(W
 
 ### Windowsの場合
 
-Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"DOWNLOAD RSTUDIO FOR WINDOWS"をクリックして"RStudio-2022.02.1-461.exe"をダウンロードする。
+Step.1： [Download the RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download)から"DOWNLOAD RSTUDIO DESKTOP FOR WINDOWS"をクリックして"RStudio-2023.03.0-386.exe"をダウンロードする。
 
-Step.2： ダウンロードした"RStudio-2022.02.1-461.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
+Step.2： ダウンロードした"RStudio-2023.03.0-386.exe"を開くと「このアプリがデバイスに変更を加えることを許可しますか」と書かれたウィンドウが現れるので、「はい」をクリックする。
 
 Step.3： 「RStudio セットアップ」と上に書かれたウィンドウが現れるので、下に現れる「次へ」「インストール」を何度かクリックしていき、最後に下に現れる「完了」をクリックするとインストールが完了する。
 
 ### Macの場合
 
-Step.1： [Download the RStudio IDE](https://www.rstudio.com/products/rstudio/download/#download)から"RStudio-2022.02.1-461.dmg"をクリックして当該ファイルをダウンロードする。
+Step.1： [Download the RStudio Desktop](https://www.rstudio.com/products/rstudio/download/#download)から"RStudio-2023.03.0-386.dmg"をクリックして当該ファイルをダウンロードする。
 
 Step.2： ダウンロードしたpkgファイルを「アプリケーションで開く：DiskImageMounter」で開くと、"RStudio.app"アイコンと"Applications"へのショートカットアイコンの入ったフォルダ(Finder)が開くので、"RStudio.app"アイコンを"Applications"へのショートカットアイコンへとドラッグする。
 

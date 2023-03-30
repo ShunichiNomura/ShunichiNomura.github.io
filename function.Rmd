@@ -145,7 +145,7 @@ colnames(vw) # データフレームの列名（変数名）
 
 ![](images/zipangu.png){width=70%}
 
-下図のようにzipanguパッケージが読み込まれたら、zipanguパッケージ内のconvert_jyear関数を使ってみましょう。convert_jyear関数は様々な形式の和暦を西暦へと変換する関数です。詳細はHelpタブを見るよりも[開発者による解説](https://uribo.hatenablog.com/entry/2019/12/02/163114)を参照した方が分かりやすいです。下図では和暦"令和4年"をconvert_jyear関数に入れると西暦2022が返ってくる例を示しています。
+下図のようにzipanguパッケージが読み込まれたら、zipanguパッケージ内のconvert_jyear関数を使ってみましょう。convert_jyear関数は様々な形式の和暦を西暦へと変換する関数です。詳細はHelpタブを見るよりも[開発者による解説](https://uribo.hatenablog.com/entry/2019/12/02/163114)を参照した方が分かりやすいです。下図では和暦\"令和4年\"をconvert_jyear関数に入れると西暦2022が返ってくる例を示しています。
 
 ![](images/convert_jyear.png){width=70%}
 

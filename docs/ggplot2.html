@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>ggplot2による作図</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="site_style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RStudio入門</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">はじめに</a>
+</li>
+<li>
+  <a href="install.html">インストール</a>
+</li>
+<li>
+  <a href="cloud.html">Posit Cloud</a>
+</li>
+<li>
+  <a href="basics.html">基本操作</a>
+</li>
+<li>
+  <a href="object.html">オブジェクト</a>
+</li>
+<li>
+  <a href="function.html">関数</a>
+</li>
+<li>
+  <a href="files.html">ファイル入出力</a>
+</li>
+<li>
+  <a href="analysis.html">回帰分析と作図</a>
+</li>
+<li>
+  <a href="ggplot2.html">ggplot2による作図</a>
+</li>
+<li>
+  <a href="dplyr.html">dplyrによるデータ操作</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">ggplot2による作図</h1>
+
+</div>
+
+
+<div id="ggplot2とは" class="section level2">
+<h2>ggplot2とは</h2>
+<p>Rのplot関数による通常の作図は、他の統計分析ソフトウェアに比べて見栄えが今ひとつです。ggplot2パッケージを利用することで、様々な種類の図を見栄え良く描くことができます。</p>
+<p>ggplot2を利用するにはまずggplot2パッケージのインストールと読み込みを行ってください。</p>
+<pre class="r"><code>install.packages(&quot;ggplot2&quot;)
+library(ggplot2)</code></pre>
+</div>
+<div id="標準組込データiris" class="section level2">
+<h2>標準組込データiris</h2>
+<p>ここでは、Rの標準組込データであるiris（アヤメのデータ）を題材に、ggplot2の関数によるいくつかの作図を紹介していきたいと思います。
+Rには、起動時から利用可能ないくつかの標準組込データが備わっており、irisはその中の1つです。irisというオブジェクト（データフレーム）が初めからあるものとして次のように参照することができます。</p>
+<pre class="r"><code># irisデータの先頭5行を表示
+head(iris,5)</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa</code></pre>
+<p>irisデータは3種のアヤメ（setosa, versicolor,
+virginica）について、種類ごとにがく片・花びらの長さと幅のデータを50件ずつ集めたデータセットであり、以下の5つの列（変数）からなります：</p>
+<ul>
+<li><p>Sepal.Length: がく片の長さ（cm）</p></li>
+<li><p>Sepal.Width: がく片の幅（cm）</p></li>
+<li><p>Petal.Length: 花びらの長さ（cm）</p></li>
+<li><p>Petal.Width: 花びらの幅（cm）</p></li>
+<li><p>Species: アヤメの種類名（setosa, versicolor, virginica）</p></li>
+</ul>
+</div>
+<div id="ggplot2による作図" class="section level2">
+<h2>ggplot2による作図</h2>
+<div id="基本事項散布図" class="section level3">
+<h3>基本事項（散布図）</h3>
+<p>ggplot2では、描画する要素ごとに関数が用意されており、それらを<code>+</code>で繋げることで「重ね描き」する方式となっています。</p>
+<p>例として、Rの標準組込データであるirisデータ（アヤメのデータ）について、x軸（横軸）をPetal.Length（花びらの長さ）、y軸（縦軸）をPetal.Width（花びらの幅）とした散布図は次のようにして描くことができます。</p>
+<pre class="r"><code># 散布図
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width, col=Species, shape=Species)) +
+  geom_point()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>上のコードの1行目のggplot関数は、次のように作図に用いるデータフレームと、x軸やy軸に用いるデータフレームの変数名を指定するものです。</p>
+<p>ggplot(データフレーム, aes(x=x軸の変数名, y=y軸の変数名,
+col=色分けする変数名, shape=点種分けする変数名, …))</p>
+<p>そしてggplot関数の後ろに<code>+</code>を付けて、2行目に散布図の点を描くgeom_point関数を加えることで散布図が描かれています。</p>
+<p>ggplotによる作図では、通常のplotよりも見栄えが良くなるよう、以下を始めとする様々な工夫が凝らされています。</p>
+<ul>
+<li><p>グラフの背景がグレーになり、白い目盛り補助線が引かれる。</p></li>
+<li><p>色分けしたときに自動で凡例がグラフ外に作成される（凡例がグラフ内のデータと重ならない）</p></li>
+<li><p>軸名や目盛りの文字サイズ・文字の向きが見やすいよう調整されている</p></li>
+</ul>
+<p>ggplot関数は、一旦オブジェクトに代入しておいて、<code>+</code>で描画要素を色々と加えてから表示させると便利なことが多いです。例として、上の散布図に折れ線を描くgeom_line関数を加えてから作図してみます。</p>
+<pre class="r"><code># 散布図（折れ線付加して作図）
+g0 = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, col=Species, shape=Species)) 
+g1 = g0 + geom_point()
+g1 + geom_line() # ggplotオブジェクトの表示＝作図となる</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>ここでgeom_line関数の代わりに、次のようにgeom_smooth関数を加えると、アヤメの種類(Species)ごとに散布図のデータに当てはめた回帰直線(method=“lm”)が描かれます。なお、それぞれの回帰直線の周りにグレーの帯がありますが、これは回帰直線の推定には誤差があると考えられ、誤差により実際どれだけブレるか（95%信頼区間）を表すものとなっています。</p>
+<pre class="r"><code># 散布図（回帰直線付加して作図）
+g1 + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>最後に、次のlab関数を加えることでグラフタイトルや軸名などを追加・変更することもできます。</p>
+<p>labs(title=グラフタイトル, x=x軸名, y=y軸名)</p>
+<pre class="r"><code># 散布図（グラフタイトル追加・軸名変更して作図）
+g1 + labs(title=&quot;花びらの長さ・幅の関係&quot;, x=&quot;花びらの長さ&quot;, y=&quot;花びらの幅&quot;)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>以上の基本事項を押さえた上で、以降ではグラフの種類別に描画コードの作り方を紹介していきます。</p>
+</div>
+<div id="棒グラフ" class="section level3">
+<h3>棒グラフ</h3>
+<p>棒グラフはgeom_bar関数を使って次のように描くことができます。なお、aes関数内のfillは棒の内部の色分けを指定する引数で、colを使うと棒の枠線だけ色分けされてしまうことに注意してください。ここではアヤメの種類は</p>
+<pre class="r"><code># 棒グラフ
+ggplot(iris, aes(x=Species, fill=Species)) +
+  geom_bar()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="ヒストグラム" class="section level3">
+<h3>ヒストグラム</h3>
+<p>ヒストグラムはgeom_histogram関数を使って描くことができます。ヒストグラムの階級幅はbinwidth引数で指定することができます。</p>
+<pre class="r"><code># ヒストグラム
+ggplot(iris, aes(x=Petal.Length)) +
+  geom_histogram(binwidth=0.2)</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="箱ひげ図" class="section level3">
+<h3>箱ひげ図</h3>
+<p>箱ひげ図はgeom_boxplot関数を使って次のように描くことができます。棒グラフと同様に箱の内部の色分けはfill引数で指定します。</p>
+<pre class="r"><code># 箱ひげ図
+gbox = ggplot(iris, aes(x=Species, y=Petal.Length, fill=Species)) +
+  geom_boxplot()
+gbox</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>さらにgeom_jitter関数を加えると、実際のデータを「点が被らないよう左右に適当に散らして」表示してくれて、データの細かい様子が確認できます。</p>
+<pre class="r"><code># 箱ひげ図（データ点を加えて作図）
+gbox + geom_jitter()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="violinプロット" class="section level3">
+<h3>violinプロット</h3>
+<p>箱ひげ図はデータの四分位数を箱で示してくれますが、もっと滑らかな曲線でデータの分布を示したい場合にはgeom_violin関数を使ったviolinプロットが便利です。violinプロットではデータの最小値から最大値までの範囲で左右対称な帯を描き、帯の太さでデータの頻度の高さを表しています。箱ひげ図と同様にgeom_jitter関数で各データ点を表示することもできます。</p>
+<pre class="r"><code># violinプロット
+ggplot(iris, aes(x=Species, y=Petal.Length, fill=Species)) +
+  geom_violin() +
+  geom_jitter()</code></pre>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

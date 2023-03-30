@@ -14,7 +14,7 @@
 
 <title>はじめに</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -61,6 +61,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="site_style.css" type="text/css" />
 
 
@@ -85,6 +86,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -142,11 +146,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -175,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -184,16 +192,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -310,7 +311,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -326,7 +327,7 @@ div.tocify {
   <a href="install.html">インストール</a>
 </li>
 <li>
-  <a href="cloud.html">RStudio Cloud</a>
+  <a href="cloud.html">Posit Cloud</a>
 </li>
 <li>
   <a href="basics.html">基本操作</a>
@@ -343,6 +344,12 @@ div.tocify {
 <li>
   <a href="analysis.html">回帰分析と作図</a>
 </li>
+<li>
+  <a href="ggplot2.html">ggplot2による作図</a>
+</li>
+<li>
+  <a href="dplyr.html">dplyrによるデータ操作</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -357,7 +364,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">はじめに</h1>
 <h4 class="author">野村俊一</h4>
-<h4 class="date">最終更新: 2022-04-03</h4>
+<h4 class="date">最終更新: 2023-03-30</h4>
 
 </div>
 
@@ -381,8 +388,11 @@ div.tocify {
 </div>
 <div id="rとは" class="section level2">
 <h2>Rとは</h2>
-<p>Rとは、主にデータ分析に利用される完全無償のプログラミング・ソフトウェアです。Python, Java, Cなどの汎用的なプログラム言語と比べると、Rはデータ分析に特化したプログラム言語となっており、以下に挙げる3つの強みを持っています。プログラミング経験者にはPythonもお薦めできますが、全くのプログラミング未経験者にはやや敷居が高く、1行からのごく短いプログラムでデータ分析が可能で未経験者に易しいRの習得をまずお薦めしています。</p>
-<div id="強み１1行からのごく短いコードでデータ分析が可能" class="section level4">
+<p>Rとは、主にデータ分析に利用される完全無償のプログラミング・ソフトウェアです。Python,
+Java,
+Cなどの汎用的なプログラム言語と比べると、Rはデータ分析に特化したプログラム言語となっており、以下に挙げる3つの強みを持っています。プログラミング経験者にはPythonもお薦めできますが、全くのプログラミング未経験者にはやや敷居が高く、1行からのごく短いプログラムでデータ分析が可能で未経験者に易しいRの習得をまずお薦めしています。</p>
+<div id="強み１1行からのごく短いコードでデータ分析が可能"
+class="section level4">
 <h4><u>強み１．1行からのごく短いコードでデータ分析が可能</u></h4>
 <p>汎用的なプログラム言語では、その汎用性がゆえに最初に基本関数のライブラリを読み込んだり変数の型を定義するためソースコードが必然的に長くなり、コードを書く側にも読む側にも負担を与えます。</p>
 <p>Rでは基本関数の読み込みや変数の型定義が不要であり、さらに、データ分析手法ごとに用意された関数を使えばたった1行の命令文でデータへ分析手法を適用できます。</p>
@@ -390,30 +400,40 @@ div.tocify {
 <pre class="r"><code>plot(hclust(dist(LifeCycleSavings)),cex=0.7)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 </div>
-<div id="強み２プログラムを書いたそばから1行ずつ実行可能" class="section level4">
+<div id="強み２プログラムを書いたそばから1行ずつ実行可能"
+class="section level4">
 <h4><u>強み２．プログラムを書いたそばから1行ずつ実行可能</u></h4>
 <p>一般にプログラミングというと、あらかじめ長いソースコードを書き上げてからパソコンでコンパイルしてエラーを全部解消しないと実行できないものが多く、その作業過程に慣れないととても煩雑に感じられてしまいます。しかしRでは、画面上で1行命令文を書いて改行すれば、その命令文が即座に実行されその場で実行結果を確認することができます（これをインタープリタ型言語と言います）。また、前に実行した命令文は打ち込み直さなくても↑（上矢印）キーですぐに呼び出すことができます。</p>
 <p>1行ずつ命令文を打ち込んでその実行結果を確認できるので、エラーを出しがちな初心者でも1行ずつトライ＆エラーで着実にデータ分析を進めることができます。もちろん、後述するスクリプトファイルにソースコードを書き溜めてまとめて実行することもできます。</p>
 </div>
-<div id="強み３高度で専門的なものまで様々な分析手法が簡単に利用可能" class="section level4">
+<div id="強み３高度で専門的なものまで様々な分析手法が簡単に利用可能"
+class="section level4">
 <h4><u>強み３．高度で専門的なものまで様々な分析手法が簡単に利用可能</u></h4>
-<p>Rの一番の売りは、扱える分析手法の豊富さにあると考えています。 Rはオープンソースのプログラム言語であり、誰でも新たな分析手法を実装したパッケージを作って公開することができます。そのため、世界中で開発・公開されているパッケージはなんと1万を超えており、他のプログラム言語に比べて群を抜く数の分析手法を扱うことができます。 データ分析手法は社会科学、生物科学、医学など様々な分野で独自の発展を遂げており、その高度で専門的な分析手法も、実装済のパッケージをインストールすれば関数1つで適用することができます。</p>
-<p>データ分析用のソフトウェアには他にもSAS, SPSS, STATAなどがあり、それぞれRに対して優位な点もあります。しかし、これらのソフトウェアはすべて有償であり就職先でも利用できるとは限りませんし、扱える分析手法の豊富さではやはりRが優れています。 また、エクセルでも回帰分析のような最も基本的なデータ分析は可能ですが、Rでは以下に挙げるようなテキストデータ分析やディープラーニングなどの高度な分析を無料で手軽に扱うことができます。</p>
+<p>Rの一番の売りは、扱える分析手法の豊富さにあると考えています。
+Rはオープンソースのプログラム言語であり、誰でも新たな分析手法を実装したパッケージを作って公開することができます。そのため、世界中で開発・公開されているパッケージはなんと1万を超えており、他のプログラム言語に比べて群を抜く数の分析手法を扱うことができます。
+データ分析手法は社会科学、生物科学、医学など様々な分野で独自の発展を遂げており、その高度で専門的な分析手法も、実装済のパッケージをインストールすれば関数1つで適用することができます。</p>
+<p>データ分析用のソフトウェアには他にもSAS, SPSS,
+STATAなどがあり、それぞれRに対して優位な点もあります。しかし、これらのソフトウェアはすべて有償であり就職先でも利用できるとは限りませんし、扱える分析手法の豊富さではやはりRが優れています。
+また、エクセルでも回帰分析のような最も基本的なデータ分析は可能ですが、Rでは以下に挙げるようなテキストデータ分析やディープラーニングなどの高度な分析を無料で手軽に扱うことができます。</p>
 <div class="figure">
 <img src="images/tree.png" style="width:60.0%" alt="" />
-<p class="caption"><u><strong>図１．花弁の長さ・幅からアヤメの種類を見分ける分類木の学習</strong></u></p>
+<p
+class="caption"><u><strong>図１．花弁の長さ・幅からアヤメの種類を見分ける分類木の学習</strong></u></p>
 </div>
 <div class="figure">
 <img src="images/topicmodel.png" style="width:60.0%" alt="" />
-<p class="caption"><u><strong>図２．Wikipediaのページ間で共通するトピックの抽出と主要単語の図示</strong></u></p>
+<p
+class="caption"><u><strong>図２．Wikipediaのページ間で共通するトピックの抽出と主要単語の図示</strong></u></p>
 </div>
 <div class="figure">
 <img src="images/mansion.png" style="width:90.0%" alt="" />
-<p class="caption"><u><strong>図３．都内中古マンション取引価格の地域差の推定</strong></u></p>
+<p
+class="caption"><u><strong>図３．都内中古マンション取引価格の地域差の推定</strong></u></p>
 </div>
 <div class="figure">
 <img src="images/deeplearning.png" style="width:70.0%" alt="" />
-<p class="caption"><u><strong>図４．ディープラーニングによる画像識別</strong></u></p>
+<p
+class="caption"><u><strong>図４．ディープラーニングによる画像識別</strong></u></p>
 </div>
 </div>
 </div>

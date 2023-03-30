@@ -6,7 +6,7 @@ navbar:
       href: index.html
     - text: "インストール"
       href: install.html
-    - text: "RStudio Cloud"
+    - text: "Posit Cloud"
       href: cloud.html
     - text: "基本操作"
       href: basics.html
@@ -18,6 +18,10 @@ navbar:
       href: files.html
     - text: "回帰分析と作図"
       href: analysis.html
+    - text: "ggplot2による作図"
+      href: ggplot2.html
+    - text: "dplyrによるデータ操作"
+      href: dplyr.html
 output:
   html_document:
     theme: default
