@@ -1,5 +1,5 @@
 ---
-title: "はじめに"
+title: "RStudio入門：はじめに"
 author: "野村俊一"
 date: "最終更新: `r Sys.Date()`"
 output:

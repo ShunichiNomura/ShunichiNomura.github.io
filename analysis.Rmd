@@ -1,5 +1,5 @@
 ---
-title: "回帰分析と作図"
+title: "回帰と作図"
 output:
   html_document:
     toc: true

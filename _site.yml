@@ -1,8 +1,7 @@
 name: "RStudio入門"
 navbar:
-  title: "RStudio入門"
   left:
-    - text: "はじめに"
+    - text: "RStudio入門"
       href: index.html
     - text: "インストール"
       href: install.html
@@ -16,11 +15,11 @@ navbar:
       href: function.html
     - text: "ファイル入出力"
       href: files.html
-    - text: "回帰分析と作図"
+    - text: "回帰と作図"
       href: analysis.html
-    - text: "ggplot2による作図"
+    - text: "ggplot2"
       href: ggplot2.html
-    - text: "dplyrによるデータ操作"
+    - text: "dplyr"
       href: dplyr.html
 output:
   html_document:
