@@ -34,7 +34,7 @@ Posit Cloudには無料アカウント（Free plan）と有料アカウント（
 
 ## 無料アカウントの作成
 
-[下図のSign Upページ](https://login.posit.cloud/register?redirect=https%3A%2F%2Fclient.login.rstudio.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D0)から以下のいずれかの方法でアカウントを登録してください。
+[下図のSign Upページ](https://login.posit.cloud/register?redirect=https%3A%2F%2Fclient.login.posit.cloud%2Foauth%2Flogin%3Fshow_auth%3D0%26show_login%3D0)から以下のいずれかの方法でアカウントを登録してください。
 
 ![](images/signup.png){width=40%}
 
@@ -53,7 +53,7 @@ Email, Password, First name, Last nameを入力して"Sign Up"ボタンをクリ
 
 ## ログイン
 
-アカウントの登録完了後は、[下図のLog Inページ](https://login.rstudio.cloud/)から以下のようにログインしてください。
+アカウントの登録完了後は、[下図のLog Inページ](https://login.posit.cloud/)から以下のようにログインしてください。
 
 ![](images/login.png){width=40%}
 
@@ -65,7 +65,7 @@ Email欄に登録したEmailアドレスを入力して"Continue"をクリック
 
 ### Googleアカウントで登録している場合
 
-"Log In with Google"をクリックすると、上部に"Googleにログイン"と書かれたページに移るので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。すると、上図のような利用サービスを選択するページに遷移しますので、"RStudio Cloud"をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。
+"Log In with Google"をクリックすると、上部に"Googleにログイン"と書かれたページに移るので、Googleアカウントにログイン済であれば表示されるアカウントをクリックし、そうでなければGoogleアカウントのメールアドレスとパスワードを入力してください。すると、上図のような利用サービスを選択するページに遷移しますので、"Posit Cloud"をクリックしてください。その結果、ログイン後の画面が現れればログイン完了です。
 
 ## ログイン後のRStudio起動
 
