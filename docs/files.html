@@ -378,12 +378,8 @@ fileEncoding="cp932")</p>
 header = F or FALSEを追加して read.csv("ファイル名", header = F,
 fileEncoding="cp932")
 で読み込んでください。なお、任意のフォルダにあるcsvファイルも、read.csv関数内のファイル名をファイルの絶対パス(スラッシュ”/“区切り)に替えることで読み込めますが、詳細は割愛します。</p>
-<p>以降では例として、国土交通省が公開している不動産取引価格情報のデータ（csvファイル）を読み込みます。<a
-href="https://www.land.mlit.go.jp/webland/download.html">こちらのダウンロードサイト</a>から、取引時期と都道府県、市区町村を下図のように選んでダウンロードボタンを押すと、当該期間・地域の取引情報が
-13101_20223_20223.zip
-というzip圧縮ファイルでダウンロードされます。ダウンロードされたzip圧縮ファイルを解凍（展開）すると
-13101_20223_20223.csv というcsvファイルが得られます。</p>
-<p><img src="images/webdownload.png" style="width:60.0%" /></p>
+<p>以降では例として、国土交通省のウェブサイトから取得した不動産取引価格情報データ（13101_20223_20223.csv<a
+href="https://drive.google.com/file/d/1t_n71xxCse86-RmLGuXcMJUizwnaYyrT/view?usp=sharing">ダウンロード</a>）を読み込みます。</p>
 <div id="pcwindowsmacの場合" class="section level3">
 <h3>PC(Windows/Mac)の場合</h3>
 <p>まずはRStudioのConsoleタブで getwd()
