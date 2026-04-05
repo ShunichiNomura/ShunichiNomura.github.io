@@ -13,7 +13,7 @@
 
 <title>関数</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -491,18 +491,16 @@ colnames(vw) # データフレームの列名（変数名）</code></pre>
 </div>
 <div id="パッケージ" class="section level2">
 <h2>パッケージ</h2>
-<p>最後に、パッケージをインストールして、パッケージ内の関数を利用する方法を解説します。
-ここでは、日本人に便利な関数をまとめた<a
-href="https://uribo.hatenablog.com/entry/2019/12/02/163114">zipanguパッケージ</a>をインストールして、パッケージ内にある和暦を西暦に変換する関数convert_jyearを使ってみたいと思います。</p>
+<p>Rのパッケージとは、Rの基本機能を拡張するための追加機能の集まりで、関数やデータセットなどが含まれています。Rの基本機能だけではできないことも、パッケージをインストールして利用することで可能になります。</p>
+<p>ここでは、後で「回帰と作図」にて紹介するpairs.panels関数を含んでいる<a
+href="https://cran.r-project.org/web/packages/psych/index.html">psychパッケージ</a>を例に、パッケージをインストールして、パッケージを読み込む方法を解説します。</p>
 <p>パッケージには初めからインストール済であるものもあります。下図の右下にあるPackagesタブで、インストール済のパッケージの一覧を見ることができます。一覧の中に目的のパッケージが無かったり、以前に目的のパッケージを使ってから長い年月が経っている（パッケージのバージョンが古い）場合には、次に解説する方法で目的のパッケージをインストールしましょう。</p>
 <p><img src="images/packages.png" style="width:70.0%" /></p>
 <p>パッケージのインストールは、Consoleタブにinstall.packages(“パッケージ名”)と入力して実行すれば、あとは下図のように自動でインストールが進みます。あるいは、Packagesタブの左上にあるInstallボタンをクリックして出てくる下図のウィンドウの中段にパッケージ名を入力し下のInstallボタンをクリックすると、Consoleタブにinstall.packages(“パッケージ名”)が自動入力されて同じようにインストールが始まります。</p>
 <p><img src="images/installpackages.png" style="width:70.0%" /></p>
-<p>インストールが完了すると、下図のようにPackagesタブの一覧にインストールしたパッケージ（zipangu）が追加されていることが確認できます。ただし、インストールが完了しただけではまだパッケージの関数を使うことはできません。パッケージを利用するには、Consoleタブにlibrary(パッケージ名)と入力して実行するか、Packagesタブの青字のパッケージ名の左にある四角をクリックしてチェックすることで、パッケージを読み込む必要があります。</p>
-<p><img src="images/zipangu.png" style="width:70.0%" /></p>
-<p>下図のようにzipanguパッケージが読み込まれたら、zipanguパッケージ内のconvert_jyear関数を使ってみましょう。convert_jyear関数は様々な形式の和暦を西暦へと変換する関数です。詳細はHelpタブを見るよりも<a
-href="https://uribo.hatenablog.com/entry/2019/12/02/163114">開発者による解説</a>を参照した方が分かりやすいです。下図では和暦"令和4年"をconvert_jyear関数に入れると西暦2022が返ってくる例を示しています。</p>
-<p><img src="images/convert_jyear.png" style="width:70.0%" /></p>
+<p>インストールが完了すると、下図のようにPackagesタブの一覧にインストールしたパッケージ（psych）が追加されていることが確認できます。ただし、インストールが完了しただけではまだパッケージの関数を使うことはできません。パッケージを利用するには、Consoleタブにlibrary(パッケージ名)と入力して実行するか、Packagesタブの青字のパッケージ名の左にある四角をクリックしてチェックすることで、パッケージを読み込む必要があります。</p>
+<p><img src="images/psych.png" style="width:70.0%" /></p>
+<p>psychパッケージが読み込まれたら、psychパッケージのpairs.panels関数が参照できるようになります。たとえばConsoleタブに関数名だけ入力して実行すると、上図のように関数の引数名やデフォルト値が参照できます。pairs.panels関数の使い方と使用例につきましては「回帰と作図」にて紹介いたします。</p>
 </div>
 
 
