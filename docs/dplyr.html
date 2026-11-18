@@ -13,7 +13,7 @@
 
 <title>dplyrによるデータ操作</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -509,7 +509,7 @@ Petal.LWR
 iris %&gt;% 
   mutate(Sepal.LWR = Sepal.Length/Sepal.Width, Petal.LWR = Petal.Length/Petal.Width) %&gt;% 
   ggplot(aes(x=Sepal.LWR, y=Petal.LWR, col=Species, shape=Species)) + geom_point()</code></pre>
-<p><img src="dplyr_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="dplyr_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" /></p>
 </div>
 <div id="集計summarise関数" class="section level2">
 <h2>集計（summarise関数）</h2>

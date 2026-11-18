@@ -13,7 +13,7 @@
 
 <title>ggplot2による作図</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -404,7 +404,7 @@ virginica）について、種類ごとにがく片・花びらの長さと幅�
 <pre class="r"><code># 散布図
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width, col=Species, shape=Species)) +
   geom_point()</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-3-1.png" alt="" width="672" /></p>
 <p>上のコードの1行目のggplot関数は、次のように作図に用いるデータフレームと、x軸やy軸に用いるデータフレームの変数名を指定するものです。</p>
 <p>ggplot(データフレーム, aes(x=x軸の変数名, y=y軸の変数名,
 col=色分けする変数名, shape=点種分けする変数名, …))</p>
@@ -420,16 +420,16 @@ col=色分けする変数名, shape=点種分けする変数名, …))</p>
 g0 = ggplot(iris, aes(x=Petal.Length, y=Petal.Width, col=Species, shape=Species)) 
 g1 = g0 + geom_point()
 g1 + geom_line() # ggplotオブジェクトの表示＝作図となる</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
 <p>ここでgeom_line関数の代わりに、次のようにgeom_smooth関数を加えると、アヤメの種類(Species)ごとに散布図のデータに当てはめた回帰直線(method=“lm”)が描かれます。なお、それぞれの回帰直線の周りにグレーの帯がありますが、これは回帰直線の推定には誤差があると考えられ、誤差により実際どれだけブレるか（95%信頼区間）を表すものとなっています。</p>
 <pre class="r"><code># 散布図（回帰直線付加して作図）
 g1 + geom_smooth(method=&quot;lm&quot;)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <p>最後に、次のlab関数を加えることでグラフタイトルや軸名などを追加・変更することもできます。</p>
 <p>labs(title=グラフタイトル, x=x軸名, y=y軸名)</p>
 <pre class="r"><code># 散布図（グラフタイトル追加・軸名変更して作図）
 g1 + labs(title=&quot;花びらの長さ・幅の関係&quot;, x=&quot;花びらの長さ&quot;, y=&quot;花びらの幅&quot;)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
 <p>以上の基本事項を押さえた上で、以降ではグラフの種類別に描画コードの作り方を紹介していきます。</p>
 </div>
 <div id="棒グラフ" class="section level3">
@@ -438,7 +438,7 @@ g1 + labs(title=&quot;花びらの長さ・幅の関係&quot;, x=&quot;花びら
 <pre class="r"><code># 棒グラフ
 ggplot(iris, aes(x=Species, fill=Species)) +
   geom_bar()</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-7-1.png" alt="" width="672" /></p>
 </div>
 <div id="ヒストグラム" class="section level3">
 <h3>ヒストグラム</h3>
@@ -446,7 +446,7 @@ ggplot(iris, aes(x=Species, fill=Species)) +
 <pre class="r"><code># ヒストグラム
 ggplot(iris, aes(x=Petal.Length)) +
   geom_histogram(binwidth=0.2)</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 </div>
 <div id="箱ひげ図" class="section level3">
 <h3>箱ひげ図</h3>
@@ -455,11 +455,11 @@ ggplot(iris, aes(x=Petal.Length)) +
 gbox = ggplot(iris, aes(x=Species, y=Petal.Length, fill=Species)) +
   geom_boxplot()
 gbox</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-9-1.png" alt="" width="672" /></p>
 <p>さらにgeom_jitter関数を加えると、実際のデータを「点が被らないよう左右に適当に散らして」表示してくれて、データの細かい様子が確認できます。</p>
 <pre class="r"><code># 箱ひげ図（データ点を加えて作図）
 gbox + geom_jitter()</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" /></p>
 </div>
 <div id="violinプロット" class="section level3">
 <h3>violinプロット</h3>
@@ -468,7 +468,7 @@ gbox + geom_jitter()</code></pre>
 ggplot(iris, aes(x=Species, y=Petal.Length, fill=Species)) +
   geom_violin() +
   geom_jitter()</code></pre>
-<p><img src="ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="ggplot2_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" /></p>
 </div>
 </div>
 
